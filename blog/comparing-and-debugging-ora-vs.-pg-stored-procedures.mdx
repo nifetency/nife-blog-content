@@ -1,0 +1,143 @@
+---
+title: "Comparing and Debugging ORA vs. PG Stored Procedures: A Generic Example"
+description: "Learn the key differences between Oracle (ORA) and PostgreSQL (PG) stored procedures, including syntax, debugging techniques, and best practices."
+author: "Nida Sahar"
+date: "2025-04-08"
+keywords: ["Oracle vs PostgreSQL", "Database Debugging", "Stored Procedures in Oracle", "Stored Procedures in PostgreSQL", "SQL Debugging Techniques", "Oracle PL/SQL", "PostgreSQL PL/pgSQL", "SQL Error Handling", "Database Performance", "Database Automation"]
+tags: ["Database", "Oracle", "PostgreSQL", "Stored Procedures", "Debugging"]
+---
+
+Stored procedures are an essential component of relational databases that help with logic encapsulation, performance improvement, and process automation.  Both [Oracle (ORA)](https://www.oracle.com/database/) and [PostgreSQL (PG)](https://www.postgresql.org/) include stored procedure functionality, however they are very different from each other.  The distinctions between PG and ORA stored procedures as well as debugging techniques will be covered in this blog post.  A simple general example will be provided to demonstrate these distinctions.
+
+
+## 1. Stored Procedures in Oracle vs. PostgreSQL: Key Differences
+
+<img src={require('./img/7495401.jpg').default} alt="Stored Procedures in Oracle " width="500" height="350"/>
+<br/>
+
+
+Despite being compatible with both ORA and PG, stored procedures differ significantly in terms of syntax, functionality, and debugging techniques.  Let's look at the primary differences:
+
+
+### Syntax Differences
+#### **Oracle (ORA):**
+Oracle stored procedures are typically created using the `CREATE PROCEDURE` command and utilize [PL/SQL](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/index.html), a procedural extension of SQL. They explicitly use `IN`, `OUT`, and `IN OUT` parameters and are wrapped in a `BEGIN...END` block.
+
+#### **PostgreSQL (PG):**
+PostgreSQL uses [PL/pgSQL](https://www.postgresql.org/docs/current/plpgsql.html) for stored procedures and functions, which is similar to Oracles PL/SQL but differs in syntax and capabilities. In PG:
+- Stored procedures are created using `CREATE PROCEDURE` (introduced in version 11).
+- Functions are created using `CREATE FUNCTION`.
+- Unlike Oracle, PG does not support `IN OUT` parameters.
+
+### **Example: A Generic Stored Procedure**
+The following example determines whether a case belongs to a particular receiver type and sets an output flag appropriately.
+
+#### **Oracle (ORA) Example**
+```sql
+CREATE OR REPLACE PROCEDURE check_case_in_fips_othp(
+    p_case_id IN VARCHAR,
+    p_flag OUT CHAR,
+    p_msg OUT VARCHAR
+) AS
+BEGIN
+    SELECT 'S' INTO p_flag
+    FROM disbursements
+    WHERE case_id = p_case_id
+      AND recipient_type IN ('FIPS', 'OTHP');
+  
+    IF p_flag IS NULL THEN
+        p_flag := 'N';
+        p_msg := 'No records found';
+    END IF;
+  
+EXCEPTION
+    WHEN OTHERS THEN
+        p_flag := 'F';
+        p_msg := 'Error: ' || SQLERRM;
+END check_case_in_fips_othp;
+```
+
+#### **PostgreSQL (PG) Example**
+```sql
+CREATE OR REPLACE PROCEDURE check_case_in_fips_othp(
+    IN p_case_id VARCHAR,
+    OUT p_flag CHAR,
+    OUT p_msg VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Check if case exists
+    SELECT 'S' INTO p_flag
+    FROM disbursements
+    WHERE case_id = p_case_id
+      AND recipient_type IN ('FIPS', 'OTHP')
+    LIMIT 1;
+  
+    IF NOT FOUND THEN
+        p_flag := 'N';
+        p_msg := 'No records found';
+    END IF;
+  
+EXCEPTION
+    WHEN OTHERS THEN
+        p_flag := 'F';
+        p_msg := 'Error: ' || SQLERRM;
+END;
+$$;
+```
+
+### **Key Differences in Syntax**
+- **Procedure Declaration:** Oracle explicitly defines `IN, OUT, IN OUT` parameter modes, whereas PostgreSQL only uses `IN` or `OUT`.
+- **Exception Handling:** Oracle uses `EXCEPTION` blocks with `WHEN OTHERS THEN SQLERRM` to capture errors, while PostgreSQL mainly relies on `RAISE EXCEPTION`.
+- **Logic for No Data:** Oracle explicitly checks for `NULL`, while PostgreSQL uses the `FOUND` condition.
+
+## 2. Debugging Stored Procedures in ORA vs. PG
+
+
+<img src={require('./img/11617929.jpg').default} alt="Image representing debugging of stored procedures" width="500" height="350"/>
+<br/>
+
+
+### **Oracle (ORA) Debugging**
+- Use [`DBMS_OUTPUT.PUT_LINE`](https://docs.oracle.com/cd/B28359_01/appdev.111/b28419/d_output.htm) to output debugging messages.
+- Handle exceptions using `WHEN OTHERS THEN` and log errors to custom tables.
+- Use [Oracle SQL Developer](https://www.oracle.com/database/sqldeveloper/) for interactive debugging.
+
+#### **Example:** Debugging with `DBMS_OUTPUT`
+```sql
+DBMS_OUTPUT.PUT_LINE('The case flag is: ' || p_flag);
+```
+
+### **PostgreSQL (PG) Debugging**
+- Use [`RAISE NOTICE`](https://www.postgresql.org/docs/current/plpgsql-errors-and-messages.html) for debugging output.
+- Handle exceptions using `RAISE EXCEPTION` and log errors to a dedicated table.
+- PostgreSQL lacks an integrated debugger like Oracle SQL Developer, so debugging relies on logging and manual testing.
+
+#### **Example:** Debugging with `RAISE NOTICE`
+```sql
+RAISE NOTICE 'The case flag is: %', p_flag;
+```
+
+## 3. Conclusion
+
+<img src={require('./img/20943495.jpg').default} alt="conclusion" width="500" height="350"/>
+<br/>
+
+
+Despite having strong stored procedure functionality, Oracle and PostgreSQL differ greatly in syntax, error management, and debugging techniques. Heres a quick recap:
+- **Syntax:** Oracle explicitly defines `IN OUT`, `OUT` modes; PostgreSQL only uses `IN` and `OUT`.
+- **Exception Handling:** Oracle uses `SQLERRM`, while PostgreSQL relies on `RAISE EXCEPTION`.
+- **Debugging:** Oracle has more integrated tools like `DBMS_OUTPUT`, whereas PostgreSQL depends on `RAISE NOTICE` and logging.
+
+By understanding these differences and using effective debugging techniques, you can become a more productive developer when working with Oracle or PostgreSQL stored procedures.
+
+For deploying and managing databases efficiently, check out [Nife.io](https://nife.io/), a cutting-edge platform that simplifies database deployment and scaling.
+
+learn more about [Database deployment Guide](https://docs.nife.io/docs/UI-Guide/database). 
+
+### **Further Reading:**
+- [Oracle PL/SQL Documentation](https://docs.oracle.com/en/database/oracle/oracle-database/19/lnpls/index.html)
+- [PostgreSQL PL/pgSQL Documentation](https://www.postgresql.org/docs/current/plpgsql.html)
+- [Oracle SQL Developer Debugging Guide](https://docs.oracle.com/en/database/oracle/sql-developer/)
+- [PostgreSQL Error Handling](https://www.postgresql.org/docs/current/ecpg-errors.html)

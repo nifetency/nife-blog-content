@@ -1,0 +1,110 @@
+---
+title: 'How Websites Welcome You: Understanding Cookies, Sessions, and Tokens'
+description: "Have you ever wondered how websites remember who you are, keep you logged in, and personalize content for you? Cookies, sessions, and tokens—the hidden heroes of web customization and authentication—make it possible for your favorite e-commerce site to greet you by name or an app to remember where you left off."
+date: "2024-12-24"
+author: Nida Sahar
+keywords: [cookies, sessions, tokens, web authentication, web customization, web development, security, privacy, API authentication, JWT, modern web apps]
+tags: [cookies, sessions, tokens, authentication, JWT, web]
+---
+
+Have you ever wondered how websites remember who you are, keep you logged in, and personalize content for you? Cookies, sessions, and tokens—the hidden heroes of web customization and authentication—make it possible for your favorite e-commerce site to greet you by name or an app to remember where you left off.
+
+Let us break it down into simple terms so you can grasp how these mechanisms function and why they are important.
+
+
+<img src={require('./img/4300580.jpg').default} alt="ec2" width="900" height="550"/>
+<br/>
+
+### 1. Cookies: The Website’s Memory Jar
+
+Consider a cookie to be a small piece of information that a website requests your browser save. When you visit that page again, your browser returns the note, allowing the site to remember specific information about you.
+
+#### What Are Cookies Used For?
+- **Staying Logged In**: A cookie may contain a unique identifier (such as a user ID) that allows the website to recognize that you have previously logged in.
+- **Personalization**: Cookies can store your preferences, such as language settings or goods in your shopping cart.
+- **Tracking**: Some cookies track your browser history across multiple websites in order to deliver tailored adverts.
+
+[Learn more about managing cookies on Mozilla's website](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies).
+
+#### How Cookies Work
+1. You visit a website.
+2. The server sends a cookie to your browser, like this:
+   ```
+   Set-Cookie: user_id=12345; Expires=Wed, 29 Nov 2024 12:00:00 GMT; Secure; HttpOnly
+   ```
+3. Your browser saves the cookie and sends it back with each subsequent request to the website.
+
+#### The Downsides of Cookies
+- They can be exploited to track you across the internet.
+- If cookies are not adequately safeguarded, sensitive information may be compromised.
+
+### 2. Sessions: The Website’s Short-Term Memory
+
+Cookies are saved on your browser, but sessions remain on the server. A session is a transient "conversation" between you and the website that helps the server remember who you are when you visit.
+
+#### How Sessions Work
+1. You log in to a website.
+2. The server initiates a session and assigns it a unique ID, such as `ABC123`.
+3. The session ID is given to your browser as a cookie, allowing the server to match your requests to the appropriate session.
+
+#### Why Sessions Are Useful
+They store temporary data, such as:
+- **Authentication status** (whether you're logged in or not).
+- **Shopping cart contents** during checkout.
+
+#### Example
+When you shop online and your cart contents disappear after an hour, it means the session has expired.
+
+[Learn how sessions are implemented with PHP](https://www.php.net/manual/en/book.session.php).
+
+### 3. Tokens: The Website’s Access Pass
+
+Tokens function similarly to digital keys, proving your identity. Tokens, unlike sessions and cookies, are frequently used in modern online applications and APIs to provide safe, scalable authentication.
+
+#### How Tokens Work
+1. You log in with your username and password.
+2. The server creates a token (such as a long, random string) and delivers it to your browser or app.
+3. Every time you submit a request, the token is provided as confirmation of your identity.
+
+Learn how to [deploy a front-end site step-by-step](https://docs.nife.io/docs/UI-Guide/Site-deployment/Create-build/), including creating a build and setting it up for deployment.
+
+#### Popular Token Formats
+- **JWT (JSON Web Token)**: A self-contained token that holds data (such as user roles or expiration dates) in a safe and concise way.
+
+[Learn more about JSON Web Tokens](https://jwt.io/).
+
+#### Why Tokens Are Cool
+- **Stateless authentication**: Tokens, unlike sessions, do not require the server to remember anything. The token itself contains all of the relevant info.
+- **APIs and Mobile Apps**: Tokens are useful for authenticating across numerous devices or services.
+
+#### Example
+When you use a mobile banking app, your token enables the app to securely retrieve your account data without requiring you to check in each time.
+[Check out how Caddy can help host static websites](https://docs.nife.io/blog/caddy/#1-hosting-static-websites).
+
+### How They Work Together
+- **Cookies** hold small amounts of data (such as session IDs or tokens).
+- **Sessions** keep track of transitory states (such as logged-in users).
+- **Tokens** provide for safe, stateless authentication in modern apps and APIs.
+
+#### For instance:
+1. You log in to a website.
+2. A session ID is saved in a cookie on your browser.
+3. The server utilizes the session to monitor your login status.
+4. For APIs or mobile apps, a token may be used instead of a session.
+
+[Explore application deployment with Nife](https://docs.nife.io).
+
+### Why Should You Care?
+Understanding cookies, sessions, and tokens helps you:
+- **Stay Secure**: Understand what's going on behind the scenes with your sensitive information.
+- **Manage Privacy**: Discover how cookies can monitor you and how to control them through browser settings.
+- **Debug Issues**: As a developer, you must grasp these technologies in order to create secure and user-friendly programs.
+
+### A Quick Recap
+| Feature   | Where It Lives         | Purpose                          | Example                            |
+|-----------|------------------------|----------------------------------|------------------------------------|
+| Cookie    | Browser (client-side)  | Stores small pieces of data locally. | Remembering your shopping cart.   |
+| Session   | Server (server-side)   | Keeps temporary data for a user. | Staying logged in temporarily.     |
+| Token     | Browser or app         | Provides secure access to APIs.  | Accessing a mobile banking app.    |
+
+So the next time a website greets you with "Welcome back!" or retains your preferences, you'll understand exactly how it operates. It's all down to cookies, sessions, and tokens—a smooth technological ballet that makes the web seem like home.

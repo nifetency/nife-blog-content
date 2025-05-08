@@ -1,0 +1,164 @@
+---
+title: "A Beginner’s Guide to Using OAuth 2.0 with Amazon Cognito: Authorization Code Grant Made Simple"
+description: "Learn how to use OAuth 2.0 Authorization Code Grant flow with Amazon Cognito in a human-friendly, step-by-step guide."
+date: "2025-04-14"
+tags: [OAuth2.0, Amazon Cognito, Authentication, AWS, Web Development, Identity Management]
+author: Nida Sahar
+keywords: [OAuth 2.0 Cognito, Cognito Auth Code Grant, AWS login, Secure App Authentication, Amazon Cognito Setup]
+---
+
+
+
+When you're building a web or mobile app, one of the first things you’ll need is a way to let users log in securely. That’s where Amazon Cognito comes in. It helps you manage authentication without having to build everything from scratch.
+
+In this post, we’ll break down how to use Amazon Cognito with the OAuth 2.0 Authorization Code Grant flow—the secure and scalable way to handle user login.
+
+---
+
+## What is Amazon Cognito?
+
+<img src={require ('./img/10306562.jpg').default} alt="Illustration of Amazon Cognito features like user sign-up, login options, and secure access" width="500" height="400"/>
+<br/>
+
+Amazon Cognito is a user authentication and authorization service from AWS. Think of it as a toolbox for managing sign-ups, logins, and secure access to your app. Here’s what it can do:
+
+- **Support multiple login options:** Email, phone, or social logins (Google, Facebook, Apple).
+- **Manage users:** Sign-up, sign-in, and password recovery via **user pools**.
+- **Access AWS services securely:** Through **identity pools**.
+- **Use modern authentication:** Supports OAuth 2.0, OpenID Connect, and SAML.
+
+> 📚 Learn more in the [Amazon Cognito Documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
+
+---
+
+## Why Use Amazon Cognito?
+
+- **Scales with your app:** Handles millions of users effortlessly.
+- **Secure token management:** Keeps user credentials and sessions safe.
+- **Easy social logins:** No need to build separate Google/Facebook integration.
+- **Customizable:** Configure user pools, password policies, and even enable MFA.
+- **Tightly integrated with AWS:** Works great with API Gateway, Lambda, and S3.
+
+It’s like plugging in a powerful login system without reinventing the wheel.
+
+> 🔍 Need a refresher on OAuth 2.0 concepts? Check out [OAuth 2.0 and OpenID Connect Overview](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2)
+
+---
+
+## How Amazon Cognito Works ?
+
+<img src={require ('./img/20945218.jpg').default} alt="Diagram showing how Amazon Cognito User Pools and Identity Pools manage authentication and AWS access" width="500" height="400"/>
+<br/>
+
+Cognito is split into two parts:
+
+### 1. User Pools
+- Handles user sign-ups, sign-ins, and account recovery.
+- Provides `access_token`, `id_token`, and `refresh_token` for each user session.
+
+### 2. Identity Pools
+- Assigns temporary AWS credentials to authenticated users.
+- Uses IAM roles to control what each user can access.
+
+When using OAuth 2.0, most of the action happens in the **user pool**.
+
+---
+
+## Step-by-Step: Using OAuth 2.0 Authorization Code Grant with Cognito
+
+<img src={require ('./img/20943502.jpg').default} alt="Flowchart of OAuth 2.0 Authorization Code Grant flow using Amazon Cognito" width="500" height="400"/>
+<br/>
+
+### Step 1: Create a User Pool
+1. Head over to the AWS Console and create a new **User Pool**.
+2. Under App Clients, create a client and:
+   - Enable **Authorization Code Grant**.
+   - Set your **redirect URI** (e.g., `https://yourapp.com/callback`).
+   - Choose OAuth scopes like `openid`, `email`, and `profile`.
+3. Note down the **App Client ID** and **Cognito domain name**.
+
+> 💡 Want to see this in action with JavaScript? Here's a quick read: [Using OAuth 2.0 and Amazon Cognito with JavaScript](https://aws.amazon.com/blogs/security/how-to-use-oauth-2-0-in-amazon-cognito-learn-about-the-different-oauth-2-0-grants/)
+
+---
+
+### Step 2: Redirect Users to Cognito
+When someone clicks "Log In" on your app, redirect them to Cognito's OAuth2 authorize endpoint:
+
+```
+https://your-domain.auth.region.amazoncognito.com/oauth2/authorize?
+  response_type=code&
+  client_id=YOUR_CLIENT_ID&
+  redirect_uri=YOUR_REDIRECT_URI&
+  scope=openid+email
+```
+
+After login, Cognito will redirect back to your app with a `code` in the URL:
+```
+https://yourapp.com/callback?code=AUTH_CODE
+```
+
+> 📘 For more on how this flow works, check [OAuth 2.0 Authorization Code Flow Explained](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow)
+
+---
+
+### Step 3: Exchange Code for Tokens
+Use the code to request tokens from Cognito:
+
+```bash
+curl -X POST "https://your-domain.auth.region.amazoncognito.com/oauth2/token" \
+-H "Content-Type: application/x-www-form-urlencoded" \
+-d "grant_type=authorization_code" \
+-d "client_id=YOUR_CLIENT_ID" \
+-d "code=AUTH_CODE" \
+-d "redirect_uri=YOUR_REDIRECT_URI"
+```
+
+---
+
+### Step 4: Use the Tokens
+Once you get the tokens:
+
+```json
+{
+  "access_token": "...",
+  "id_token": "...",
+  "refresh_token": "...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+- **access_token:** Use this to call your APIs.
+- **id_token:** Contains user info like name and email.
+- **refresh_token:** Helps you get new tokens when the current one expires.
+
+Example API call:
+```bash
+curl -X GET "https://your-api.com/resource" \
+-H "Authorization: Bearer ACCESS_TOKEN"
+```
+
+---
+
+## When to Use Authorization Code Grant?
+This flow is ideal for server-side apps. It keeps sensitive data (like tokens) away from the browser, making it more secure.
+
+---
+
+## Why This Setup Rocks
+
+- **Security-first:** Tokens are exchanged on the backend.
+- **Scalable:** Works even if your app grows to millions of users.
+- **AWS-native:** Plays nicely with other AWS services.
+
+---
+
+## Conclusion
+
+Amazon Cognito takes the pain out of managing authentication. Combine it with OAuth 2.0’s Authorization Code Grant, and you’ve got a secure, scalable login system that just works.
+Start experimenting with Cognito and see how quickly you can secure your app.
+Stay tuned for more tutorials, and drop your questions below if you want help with setup!
+
+If you're looking to take your environment management further, check out how [Nife handles secrets and secure configurations](https://nife.io/oikos/features/secrets). It's designed to simplify secret management while keeping your workflows safe and efficient.
+
+Nife supports a wide range of infrastructure platforms, including AWS EKS. [See how teams are integrating their EKS clusters with Nife](https://nife.io/solutions/Add%20AWS%20EKS%20Clusters) to streamline operations and unlock more value from their cloud environments.

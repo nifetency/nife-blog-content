@@ -1,0 +1,101 @@
+---
+title: 'How To Implement Containerization In Container Orchestration With Docker And Kubernetes'
+description: 'A comprehensive guide to implementing containerization and container orchestration using Docker and Kubernetes, covering installation, image creation, and deployment.'
+date: "2023-03-12"
+redirect_from: 
+            - https://resource.nife.io/how-to-implement-containerization-in-container-orchestration-with-docker-and-kubernetes/
+tags: [Application Development, Cloud Computing, Cloud Native Development, Docker Containers, Kubernetes]
+hero: ./img/wp-content-uploads-2023-03-kubernetes-and-docker-300x173.png
+author: Tiyasha Bera
+keywords: [containerization, Docker, Kubernetes, container orchestration, DevOps]
+---
+
+_Kubernetes and Docker are important implementations in container orchestration._
+
+_Kubernetes is an open-source orchestration system that has recently gained popularity among IT operations teams and developers. Its primary functions include automating the administration of containers and their placement, scaling, and routing. Google first created it, and in 2014, Google gave it to Open Source. Since then, the Cloud Native Computing Foundation has been responsible for its maintenance. Kubernetes is surrounded by an active community and ecosystem that is now in the process of development. This community has thousands of contributors and dozens of certified partners._
+
+### What are containers, and what do they do with Kubernetes and Docker?
+
+Containers provide a solution to an important problem that arises throughout application development. When developers work on a piece of code in their local development environment, they are said to be "writing code." The moment they are ready to deploy that code into production is when they run into issues. The code, which functioned well on their system, cannot be replicated in production. Several distinct factors are at play here, including different operating systems, dependencies, and libraries.
+
+Multiple containers overcame this fundamental portability problem by separating the code from the underlying infrastructure it was executing on. This allowed for more flexibility. The developers might bundle up the program and all the bins and libraries required to operate properly and store them in a compact container image. The container may be executed in production on any machine equipped with a containerization platform.
+
+### Docker In Action
+
+Docker makes life a lot simpler for software developers by assisting them in running their programs in a similar environment without any complications, such as OS difficulties or dependencies because a Docker container gives its OS libraries. Before the advent of Docker, a developer would submit code to a tester; but due to a variety of dependency difficulties, the code often failed to run on the tester's system, despite running without any problems on the developer's machine.
+
+Because the developer and the tester now share the same system operating on a Docker container, there is no longer any pandemonium. Both of them can execute the application in the Docker environment without any challenges or variations in the dependencies that they need.
+
+### Build and Deploy Containers With Docker
+
+Docker is a tool that assists developers in creating and deploying applications inside containers. This program is free for download and can be used to "Build, Ship, and Run apps, Anywhere."
+
+Docker enables users to generate a special file called a Dockerfile. The Dockerfile file will then outline a build procedure, creating an immutable image when given to the 'docker build' command. Consider the Docker image a snapshot of the program with all its prerequisites and dependencies. When a user wishes to start the process, they will use the 'docker run' command to launch it in any environment where the Docker daemon is supported and active.
+
+Docker also has a cloud repository hosted in the cloud called Docker Hub. Docker Hub may act as a registry for you, allowing you to store and share the container images that you have built.
+
+### Implementing containerization in container orchestration with Docker and Kubernetes
+
+<img src={require('./img/kubernetes-and-docker.png').default} alt="Kubernetes and docker" width="400" height="250"/>
+<br/>
+
+
+
+The following is a list of the actions that may be taken to implement containerization as well as container orchestration using Docker and Kubernetes:
+
+#### 1. Install Docker
+
+Docker must initially be installed on the host system as the first step in the process. Containers may be created using Docker, deployed with Docker, and operated with Docker. Docker containers can only be constructed and operated using the Docker engine.
+
+#### 2. Create a Docker image
+
+Create a Docker image for your application after Docker has been successfully installed. The Dockerfile lays out the steps that must be taken to generate the image.
+
+#### 3. Build the Docker image
+
+To create the Docker image, you should use the Docker engine. The program and all of its prerequisites are included in the picture file.
+
+#### 4. Push the Docker image to a registry
+
+Publish the Docker image to a Docker registry, such as Docker Hub, which serves as a repository for Docker images and also allows for their distribution.
+
+### By Kubernetes
+
+#### 1. Install Kubernetes
+
+The installation of Kubernetes on the host system is the next step to take. [Containers](/blog/edge-vms-and-edge-containers-edge-computing-platform/) may be managed and orchestrated with the help of Kubernetes.
+
+#### 2. Create a Kubernetes cluster
+
+Create a group of nodes to work together using Kubernetes. A collection of nodes that collaborate to execute software programs is known as a cluster.
+
+#### 3. Create Kubernetes objects
+
+To manage and execute the containers, you must create Kubernetes objects such as pods, services, and deployments.
+
+#### 4. Deploy the Docker image
+
+When deploying the Docker image to the cluster, Kubernetes should be used. Kubernetes is responsible for managing the application's deployment and scalability.
+
+#### 5. Scale the application
+
+Make it as large or as small as necessary using Kubernetes.
+
+To implement containerization and container orchestration using Docker and Kubernetes, the process begins with creating a Docker image, then pushing that image to a registry, creating a Kubernetes cluster, and finally, deploying the Docker image to the cluster using Kubernetes.
+
+### Kubernetes vs. Docker: Advantages of Docker Containers
+
+<img src={require('./img/docker-containers-300x239.png').default} alt="Kubernetes and docker containers" width="400" height="300"/>
+<br/>
+
+
+
+Managing containers and container platforms provide various benefits over conventional virtualization, in addition to resolving the primary problem of portability, which was one of the key challenges.
+
+[Containers](/blog/container-as-a-service-caas-a-cloud-service-model/) have very little environmental impact. The application and a specification of all the binaries and libraries necessary for the container to execute are all needed. Container isolation is performed on the kernel level, eliminating the need for a separate guest operating system. This contrasts virtual machines (VMs), each with a copy of a guest operating system. Because libraries may exist across containers, storing 10 copies of the same library on a server is no longer required, reducing the required space.
+
+### Conclusion
+
+Kubernetes has been rapidly adopted in the cloud computing industry, which is expected to continue in the foreseeable future. Containers as a service (CaaS) and platform as a service (PaaS) are two business models companies such as IBM, Amazon, Microsoft, Google, and [Red Hat](https://en.wikipedia.org/wiki/Red_Hat) use to market their managed Kubernetes offerings. Kubernetes is already being used in production on a vast scale by some enterprises throughout the globe. Docker is another incredible combination of software and hardware. [Docker is leading the container category](/blog/docker-containers-should-you-optimize-your-docker-container/), as stated in the "RightScale 2019 State of the Cloud Report," due to its huge surge in adoption from the previous year.
+
+<iframe width="760" height="315" src="https://www.youtube.com/embed/8cqU-1wN7XE?si=Jktv8YnksNRQae6V" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

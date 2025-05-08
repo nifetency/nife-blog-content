@@ -1,0 +1,126 @@
+---
+title: "Resolving Permissions Issues with IAM: Knowledge of the iam:CreateRole Error"
+description: "Understand the causes and solutions for the iam:CreateRole permission error in AWS IAM. Learn how to troubleshoot and fix permission issues."
+date: "2025-03-14"
+tags: [AWS, DevOps, EC2]
+author: "Nida Sahar"
+keywords: [AWS , IMA, IAM Permissions, AWS Security, IAM Policy, AWS Role Management, AWS Access Control]
+---
+
+<img src={require('./img/ONKVWM0.jpg').default} alt="Illustration of cloud security featuring a cloud icon with a padlock and chain, a shield, and network connections, representing secure cloud computing." width="500" height="350"/>
+<br/>
+
+Have you ever been trying to do anything on AWS and been baffled by an error message that leaves you baffled? Often, the dreaded "not authorised to perform" error is the culprit. Usually, this occurs when a position or user lacks the authorisation needed to carry out a certain task. Have you ever witnessed anything similar to:
+
+```
+It is not permitted for user: arn:aws:sts::123456789012:assumed-role/role-name/username to perform: as no identity-based policy permits the iam:CreateRole action on resource: arn:aws:iam::123456789012:role/service-role/some-role.
+```
+
+You're not alone, so don't worry! We'll explore the meaning of this error, its causes, and—above all—how to resolve it in this piece.
+
+## What's Happening Here?
+
+The problem message is rather simple: The role or user you are working with does not possess the necessary authorisation to establish a new IAM role. The issue indicates that there is no policy associated with the user or role that permits the action [iam:CreateRole](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html), which is strictly restricted.
+
+One of AWS's most effective tools for managing access to AWS resources is [Identity and Access Management (IAM)](https://aws.amazon.com/iam/). However, great power also comes with great responsibility, and if you're not cautious, controlling permissions can get a little complicated. There is obviously a missing component in your AWS setup, as shown by the error message you are viewing.
+
+## When Do You Run Into This Issue?
+
+You'll typically run into the "not authorized to perform iam:CreateRole" issue in the following scenarios:
+
+### Creating a New IAM Role for a Service or User
+
+
+
+Creating a new role could be necessary when configuring an AWS service (such as [AWS CodeBuild](https://aws.amazon.com/codebuild/), [AWS Lambda](https://aws.amazon.com/lambda/), or [Amazon EC2](https://aws.amazon.com/ec2/)) that needs a particular IAM role for rights. This error occurs when a person or service tries to create that role without having the `iam:CreateRole` permissions.
+
+**Example:** Trying to set up a CodeBuild project that requires a service role, but the user doesn't have permission to create that role.
+
+### Setting Up Automation or CI/CD Pipelines
+
+<img src={require('./img/cicd.jpg').default} alt="DevOps engineer working on CI/CD automation with an infinity loop symbol." width="900" height="550"/>
+<br/>
+
+IAM roles may need to be created dynamically if you're automating infrastructure provisioning with a CI/CD pipeline (like [Terraform](https://developer.hashicorp.com/terraform/docs) or [AWS CodePipeline](https://aws.amazon.com/codepipeline/)). This error may occur if the pipeline's IAM role lacks the `iam:CreateRole` authorisation.
+
+**Example:** Using a script that triggers [AWS CloudFormation](https://aws.amazon.com/cloudformation/) to create new resources but fails to create a role because the IAM role executing the script doesn't have `iam:CreateRole`.
+
+### Assigning or Modifying Service Roles
+
+If the user is unable to establish roles in IAM, a permission error may occur when you attempt to assign an existing role to the service or create a new role while working with services that must assume certain IAM roles, like [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) or [Amazon ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html).
+
+**Example:** Assigning a service role to a new EC2 instance but the user trying to do this doesn't have the `iam:CreateRole` permission.
+
+### Permissions Related to Infrastructure as Code (IaC) Tools
+
+
+<img src={require('./img/57830.jpg').default} alt="Cybersecurity concept with businessmen, cloud storage, and a locked laptop" width="900" height="550"/>
+<br/>
+
+IAM role generation is managed by a number of infrastructure tools, such as [Terraform](https://developer.hashicorp.com/terraform/docs), [CloudFormation](https://docs.aws.amazon.com/cloudformation/index.html), or [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html). This error will appear if you use any of these tools to generate resources that need new IAM roles and the user isn't authorised to create roles.
+
+**Example:** Running a `terraform apply` command that tries to create new IAM roles as part of an infrastructure change, but the user running the command doesn't have permission to create roles.
+
+### Cross-Account Role Creation
+
+You may attempt to create roles in one AWS account from another if you're dealing with multiple accounts (for instance, creating a [cross-account role](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html)). The `iam:CreateRole` operation will be rejected if the second account's IAM user lacks the authority to create roles in the first account.
+
+**Example:** Trying to create a role in Account A using a user from Account B, but the user doesn't have cross-account permissions to create roles in Account A.
+
+## The Fix: Adding the Right Permission
+
+To solve this, you'll need to make sure the user or role has the correct permissions attached to it. Here's how:
+
+### Locate the Role or User
+First, figure out which role or user is running into the issue. In this case, it's `arn:aws:sts::123456789012:assumed-role/role-name/username`. You can find this in your [IAM dashboard](https://console.aws.amazon.com/iam) on the AWS console.
+
+### Check the Policies
+Next, take a look at the [IAM policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html) attached to that role or user. Policies define what actions are allowed or denied. In this case, you need to ensure that the policy allows the `iam:CreateRole` action.
+
+### Update the Policy
+
+If the permission is missing, you'll need to add a new policy or update an existing one. Here's an example of what the policy might look like to allow creating roles:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateRole",
+            "Resource": "arn:aws:iam::123456789012:role/service-role/some-role"
+        }
+    ]
+}
+```
+
+This policy gives permission to create roles for the specified resource (in this case, `some-role`). You can apply this to the user or role in question.
+
+## Things to Keep in Mind
+
+If you're still having trouble after adding the right policy, there are a few other things to check:
+
+- **[Permission Boundaries](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html)**: Strict permission boundaries can occasionally restrict the actions of AWS users or roles.
+- **[Service Control Policies (SCPs)](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html)**: Check for SCPs that prevent `iam:CreateRole` from being used.
+- **[Session Policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_session)**: Ensure no restrictive session policies are blocking the action.
+
+## Conclusion
+
+Managing IAM permissions in AWS can be tricky, but by following best practices, troubleshooting errors like `iam:CreateRole` becomes easier. Grant the least privilege necessary, use roles over users, and keep policies up to date.
+
+[Integrate Your Cluster & Deploy Applications Easily](https://docs.nife.io/docs/UI-Guide/Locations/Byoc). Learn how to connect your cluster with Nife and deploy applications effortlessly.  
+
+[Explore Nife.io](https://nife.io/). Discover how Nife simplifies cloud deployments.  
+
+## Related Reads  
+
+Want to dive deeper into AWS and cloud automation? Check out these blogs:  
+
+[Automating Deployment and Scaling in Cloud Environments like AWS and GCP](https://docs.nife.io/blog/automating-deployment-and-scaling-in-cloud-environments-like-aws-and-gcp)  
+Learn how to streamline your deployment processes and scale efficiently across cloud platforms like AWS and GCP.  
+
+[Unleash the Power of AWS DevOps Tools to Supercharge Software Delivery](https://docs.nife.io/blog/unleash-power-of-aws-devops-tools-supercharge-software-delivery)  
+Explore the tools AWS offers to enhance your software delivery pipeline, improving efficiency and reliability.  
+
+[Step-by-Step Guide to Multi-Cloud Automation with SkyPilot on AWS](https://docs.nife.io/blog/Skypilot/) Step-by-Step Guide to Multi-Cloud Automation with SkyPilot on AWs  
+

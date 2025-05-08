@@ -1,0 +1,245 @@
+---
+title: "How to Integrate Next.js with Django: A Step-by-Step Guide"
+description: "By combining Next.js and Django, you can take use of both frameworks' strengths: Next.js provides a quick, server-rendered frontend, while Django offers a stable backend. In this tutorial, we'll create a basic book review application in which Next.js retrieves and presents book data that Django delivers over an API. After completing this tutorial, you will have a functional setup in which Next.js renders dynamic book reviews by using Django's API."
+tags: [Next.js, Django, Full-Stack Development, API Integration, Web Development, Server-Side Rendering, Frontend & Backend, REST API, React, Python]
+keywords: [Next.js with Django, Full-stack Next.js and Django, Integrating Django and Next.js, Django REST API with Next.js, Next.js fetch data from Django, Server-side rendering with Next.js, Django backend for Next.js frontend, Next.js API calls to Django, Web app with Django and Next.js, Full-stack web development tutorial]
+date: "2025-01-29"
+author: Jigar Vishwakarma
+---
+
+## Introduction
+
+By combining [Next.js](https://nextjs.org/) and [Django](https://www.djangoproject.com/), you can take use of both frameworks' strengths: Next.js provides a quick, server-rendered frontend, while Django offers a stable backend. In this tutorial, we'll create a basic book review application in which Next.js retrieves and presents book data that Django delivers over an API.
+
+After completing this tutorial, you will have a functional setup in which Next.js renders dynamic book reviews by using Django's API.
+
+
+
+<img src={require('./img/nextjs+django.png').default} alt="Integrate Next.js with Django" width="700" height="350"/>
+<br/>
+---
+
+## Why Use Next.js with Django?
+:white_check_mark: **Fast Rendering**: Next.js supports [SSR (Server-Side Rendering)](https://nextjs.org/docs/basic-features/pages#server-side-rendering) and SSG (Static Site Generation), improving performance.
+
+:white_check_mark: **Separation of Concerns**: Business logic is handled by Django, and UI rendering is done by Next.js.
+
+
+:white_check_mark: **Scalability**: Since each technology can grow on its own, future improvements will be simpler.
+
+---
+
+## Step 1: Setting Up Django as the Backend
+
+### 1. Install Django and Django REST Framework
+Create a virtual environment and install dependencies:
+
+```bash
+# Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate     # Windows
+
+# Install Django and DRF
+pip install django djangorestframework
+```
+
+### 2. Create a Django Project and App
+```bash
+django-admin startproject book_api
+cd book_api
+django-admin startapp reviews
+```
+
+### 3. Configure Django REST Framework
+In `settings.py`, add REST framework and the `reviews` app:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'reviews',
+]
+```
+
+### 4. Define the Book Review Model
+In `reviews/models.py`:
+
+```python
+from django.db import models
+
+class BookReview(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    review = models.TextField()
+    rating = models.IntegerField()
+    
+    def __str__(self):
+        return self.title
+```
+
+Run migrations:
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### 5. Create a Serializer and API View
+
+In `reviews/serializers.py`:
+```python
+from rest_framework import serializers
+from .models import BookReview
+
+class BookReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookReview
+        fields = '__all__'
+```
+
+In `reviews/views.py`:
+```python
+from rest_framework.generics import ListAPIView
+from .models import BookReview
+from .serializers import BookReviewSerializer
+
+class BookReviewListView(ListAPIView):
+    queryset = BookReview.objects.all()
+    serializer_class = BookReviewSerializer
+```
+
+Add a URL route in `reviews/urls.py`:
+```python
+from django.urls import path
+from .views import BookReviewListView
+
+urlpatterns = [
+    path('reviews/', BookReviewListView.as_view(), name='book-reviews'),
+]
+```
+
+Include this in `book_api/urls.py`:
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('reviews.urls')),
+]
+```
+
+Run the server:
+```bash
+python manage.py runserver
+```
+
+You can now access book reviews at [http://127.0.0.1:8000/api/reviews/](http://127.0.0.1:8000/api/reviews/).
+
+---
+
+## Step 2: Setting Up Next.js as the Frontend
+
+### 1. Install Next.js
+In a new terminal, create a Next.js app:
+```bash
+npx create-next-app@latest book-review-frontend
+cd book-review-frontend
+npm install
+```
+
+### 2. Fetch Data from Django API
+Modify `pages/index.js` to fetch book reviews:
+```javascript
+import { useState, useEffect } from "react";
+
+export default function Home() {
+    const [reviews, setReviews] = useState([]);
+    
+    useEffect(() => {
+        fetch("http://127.0.0.1:8000/api/reviews/")
+            .then(response => response.json())
+            .then(data => setReviews(data));
+    }, []);
+    
+    return (
+        <div>
+            <h1>Book Reviews</h1>
+            <ul>
+                {reviews.map(review => (
+                    <li key={review.id}>
+                        <h2>{review.title} by {review.author}</h2>
+                        <p>{review.review}</p>
+                        <strong>Rating: {review.rating}/5</strong>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+```
+
+### 3. Start the Next.js Server
+Run:
+```bash
+npm run dev
+```
+
+Visit [http://localhost:3000/](http://localhost:3000/) to see book reviews fetched from Django!
+
+---
+
+## Step 3: Connecting Frontend and Backend
+
+Since Django and Next.js run on different ports (8000 and 3000), we need to handle CORS (Cross-Origin Resource Sharing).
+
+### 1. Install Django CORS Headers
+
+In Django, install CORS middleware:
+```bash
+pip install django-cors-headers
+```
+
+Add it to `settings.py`:
+```python
+INSTALLED_APPS += ['corsheaders']
+MIDDLEWARE.insert(1, 'corsheaders.middleware.CorsMiddleware')
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+```
+
+Restart Django:
+```bash
+python manage.py runserver
+```
+
+Now, Next.js can fetch data without CORS issues!
+
+---
+
+## Conclusion
+You've created a book review app by successfully integrating Next.js with Django. What we did was as follows:
+
+1. Use the Django REST Framework to install Django.
+2. To offer book reviews, an API was developed.
+3. Created a frontend using Next.js to show reviews.
+4. Set up CORS to allow front-end and back-end communication.
+
+
+This setup provides a solid foundation for full-stack development. You can now extend it with [Django Authentication](https://www.django-rest-framework.org/api-guide/authentication/), a database, or advanced UI components!
+
+Looking to **deploy your full-stack application seamlessly**? Check out **[Nife.io](https://nife.io)** a powerful platform for **serverless deployment, scaling, and cloud cost optimization**! 🚀  
+
+---
+
+## Further Reading
+- [Django REST Framework Documentation](https://www.django-rest-framework.org/)
+- [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
+

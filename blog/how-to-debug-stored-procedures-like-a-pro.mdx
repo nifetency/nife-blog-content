@@ -1,0 +1,85 @@
+---
+title: 'How to Debug Stored Procedures Like a Pro (Without Pulling Your Hair Out)'
+description: "Debugging stored procedures can be frustrating, but with the right tools and techniques, you can make the process smooth and efficient. This guide walks you through step-by-step methods to catch errors, test with real data, leverage TOAD's debugger, analyze execution plans, and utilize logs to troubleshoot Oracle stored procedures effectively."
+date: "2025-03-12"
+author: "Nida Sahar"
+tags: [SQL, Stored Procedures, Oracle, Debugging]
+keywords: [Stored Procedure Debugging, Oracle TOAD, SQL Errors, Database Debugging, SQL Performance, Execution Plan Analysis, SQL Best Practices, PL/SQL Debugging]
+---
+
+<img src={require('./img/Wavy_Bus-19_Single-05.jpg').default} alt="Illustration of a person working on a computer with a large database stack in the background, representing database management and optimization." width="550" height="450"/>
+<br/>
+
+
+## Step 1: Catch the Error (Without Losing Your Cool)
+Oracle includes built-in features for error detection. Use `RAISE NOTICE` to print error messages.
+
+```sql
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE NOTICE 'Error in procedure %: %', SQLERRM;
+        RETURN 'F';  -- Failure indicator
+```
+
+This prints errors directly to TOAD's Output window.
+
+## Step 2: Test with Real Data (Not Just Theoretical Inputs)
+
+<img src={require('./img/29fd1871-e017-4b34-a907-5538b18e76c0.jpg').default} alt="Illustration of a blue database icon with a circular synchronization symbol, representing database backup, restore, or synchronization." width="550" height="450"/>
+<br/>
+
+
+Use actual data, including edge cases like invalid IDs or `NULL` values, to properly debug your [stored procedure](https://www.w3schools.com/sql/sql_stored_procedures.asp).
+
+## Step 3: Get Interactive with TOAD's Debugger
+
+TOAD provides a powerful interactive debugger:
+
+- **Open SQL Editor**: Load your stored procedure.
+- **Set Breakpoints**: Click on line numbers where issues might exist.
+- **Start Debugging**: Right-click the procedure name and select `Debug`.
+- **Watch Variables**: Monitor values in real time in the `Watch` window.
+
+## Step 4: Check Execution Plan
+
+For performance issues, use TOAD's `Explain Plan` feature:
+
+```sql
+EXPLAIN PLAN FOR
+SELECT * FROM users WHERE status = 'Active';
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+```
+
+This helps identify bottlenecks and optimize queries.
+
+## Step 5: Logs, Logs, and More Logs
+
+Ensure important details are logged for future debugging:
+
+```sql
+DBMS_OUTPUT.PUT_LINE('Procedure started for user: ' || user_id);
+```
+
+## Step 6: Have a Code Review (or Just Ask Google)
+
+If stuck, seek help from **Google**, **Stack Overflow**, or a colleague for fresh perspectives.
+
+## TL;DR: Debugging Like a Boss
+
+<img src={require('./img/32935.jpg').default} alt="Isometric illustration of a computer setup with a cloud database, security icons, and a tablet on a futuristic purple-themed desk, representing cloud computing and data management." width="550" height="450"/>
+<br/>
+
+
+- Use `RAISE NOTICE` to print errors.
+- Test with **real data**.
+- Step through the code using **TOAD Debugger**.
+- Analyze the **execution plan** for slow queries.
+- Log errors for **detailed tracking**.
+- **Google it** (really, it works!).
+
+Debugging stored procedures may not be fun, but with these tips, you'll solve issues faster and with less frustration. 
+
+
+For deploying and managing databases efficiently, check out [Nife.io](https://nife.io/), a cutting-edge platform that simplifies database deployment and scaling.
+
+learn more about [Database deployment Guide](https://docs.nife.io/docs/UI-Guide/database). 

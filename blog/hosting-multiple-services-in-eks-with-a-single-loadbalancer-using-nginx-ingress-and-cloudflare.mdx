@@ -1,0 +1,153 @@
+---
+title: "Host Multiple Services in EKS with One LoadBalancer Using NGINX Ingress and Cloudflare"
+description: "Learn how to expose multiple services in your AWS EKS cluster using a single LoadBalancer with NGINX Ingress Controller and domain mapping through Cloudflare."
+date: "2025-04-23"
+tags: [AWS, EKS, Kubernetes, NGINX, Cloudflare, DevOps, Ingress]
+author: Nida Sahar
+keywords: [EKS ingress setup, NGINX ingress controller, single LoadBalancer, Cloudflare DNS, Kubernetes routing]
+---
+
+
+
+When managing Kubernetes workloads on AWS EKS, using a LoadBalancer for each service can quickly become expensive and inefficient. A cleaner, scalable, and more cost-effective solution is to use an Ingress Controller like NGINX to expose multiple services via a single LoadBalancer. This blog will walk you through how I set up Ingress in my EKS cluster using Helm, configured host-based routing, and mapped domains through Cloudflare.
+
+---
+
+##  Prerequisites
+
+- AWS EKS Cluster set up
+- `kubectl`, `helm`, and `aws-cli` configured
+- Services already running in EKS
+- Cloudflare account to manage DNS
+
+Get started with EKS in the [AWS EKS User Guide](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html).
+
+---
+
+##  Step 1: Deploy NGINX Ingress Controller using Helm
+
+<img src={require('./img/4380747.jpg').default} alt="Illustration of the NGINX Ingress Controller Helm deployment process" width="600" height="500"/>
+<br/>
+
+```bash
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm install nginx-ingress ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx --create-namespace \
+  --set controller.service.type=LoadBalancer
+```
+
+This will install the NGINX Ingress Controller and expose it through a LoadBalancer service. You can get the external ELB DNS using:
+
+```bash
+kubectl get svc -n ingress-nginx
+```
+
+Note the `EXTERNAL-IP` of the `nginx-ingress-controller`—this is your public ELB DNS.
+
+
+Learn more about NGINX Ingress at the [official Kubernetes documentation](https://kubernetes.github.io/ingress-nginx/).
+
+---
+
+
+##  Step 2: Create Your Ingress YAML for Host-Based Routing
+
+<img src={require('./img/66176.jpg').default} alt="Illustration of a group of people holding a banner representing Ingress YAML configuration for host-based routing" width="600" height="500"/>
+<br/>
+
+Below is an example Ingress manifest to expose a service using a custom domain:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pubggpiro9ypjn-ing
+  namespace: pubggpiro9ypjn
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: metube-app-622604.clb2.nifetency.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: service-f35714cd-4cb5-4f7e-b9db-4daa699640b3
+            port:
+              number: 8081
+```
+
+Apply the file using:
+
+```bash
+kubectl apply -f your-ingress.yaml
+```
+
+---
+
+##  Step 3: Configure Domain in Cloudflare
+
+<img src={require('./img/3497813.jpg').default} alt="Illustration of Cloudflare DNS record configuration showing A and CNAME records for a domain." width="600" height="500"/>
+<br/>
+
+Go to your Cloudflare dashboard and create a CNAME record:
+
+- **Name**: `metube-app-622604` (or any subdomain you want)
+- **Target**: your NGINX LoadBalancer DNS (e.g., `a1b2c3d4e5f6g7.elb.amazonaws.com`)
+- **Proxy status**: Proxied ✅
+
+Wait for DNS propagation (~1–5 minutes), and then your service will be available via the custom domain you configured.
+
+Understand DNS management in Cloudflare with the [Cloudflare DNS docs](https://developers.cloudflare.com/dns/).
+
+---
+
+##  Verify the Setup
+
+Try accessing the domain in your browser:
+
+```
+http://metube-app-622604.clb2.nifetency.com
+```
+
+You should see the application running from port `8081` of the backend service.
+
+---
+
+##  Reference Document
+
+For more detailed steps and examples, check out this shared doc:  
+🔗 [Ingress and DNS Setup Guide](https://hypershift-docs.netlify.app/how-to/kubevirt/ingress-and-dns/)
+
+---
+
+##  Benefits of This Setup
+
+- **Cost-effective**: One LoadBalancer for all services.
+- **Scalable**: Add new routes/domains by just updating the Ingress.
+- **Secure**: Easily integrate SSL with Cert-Manager or Cloudflare.
+- **Customizable**: Full control over routing, headers, and rewrites.
+
+---
+
+##  Conclusion
+
+Exposing multiple services in EKS using a single LoadBalancer with NGINX Ingress can streamline your infrastructure and reduce costs. Just remember:
+
+- Use **Helm** to install and manage the NGINX Ingress Controller
+- Configure **host-based routing** to serve multiple domains through one point
+- Use **Cloudflare DNS** to map custom domains to your LoadBalancer
+- Regularly test and validate access for each new service
+
+With just a few commands and configurations, you can build a scalable and efficient ingress setup—ready for production.
+
+ Learn how to add and manage EKS clusters with Nife’s [AWS EKS integration guide](https://nife.io/solutions/Add%20AWS%20EKS%20Clusters).
+
+ Learn how to add standalone Kubernetes clusters with Nife’s [standalone cluster setup guide](https://nife.io/solutions/Add%20for%20Standalone%20Clusters).
+
+---

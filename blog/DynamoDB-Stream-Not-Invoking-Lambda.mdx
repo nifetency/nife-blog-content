@@ -1,0 +1,157 @@
+---
+title: 'Troubleshooting: DynamoDB Stream Not Invoking Lambda'
+description: "Explore common troubleshooting steps for resolving issues when DynamoDB Streams fail to invoke AWS Lambda functions. This guide covers enabling DynamoDB Streams, configuring Lambda triggers, verifying IAM permissions, examining CloudWatch logs, and testing event handling to ensure your serverless applications react effectively to data changes. Ideal for developers looking to maintain seamless integration in their AWS environment."
+date: "2024-10-25"
+tags: [AWS,DynamoDB,Lambda,Serverless,Troubleshooting,Cloud Computing]
+author: Nida Sahar
+keywords: [DynamoDB StreamsAWS Lambda,Lambda function invocation,Troubleshooting DynamoDB,Serverless applications,AWS CloudWatch,Lambda permissions,DynamoDB trigger configuration,Event structure in Lambda ]
+---
+
+
+DynamoDB Streams and AWS Lambda can be integrated to create effective serverless apps that react to changes in your DynamoDB tables automatically. Developers frequently run into problems with this integration when the Lambda function is not called as intended. We'll go over how to troubleshoot and fix scenarios where your DynamoDB Stream isn't triggering your Lambda function in this blog article.
+
+<img src={require('./img/aws+.png').default} alt="DynamoDB Streams and AWS Lambda" width="600" height="250"/>
+<br/>
+
+### What Is DynamoDB Streams?
+Data changes in your DynamoDB table are captured by DynamoDB Streams, which enables you to react to them using a Lambda function. Every change (like INSERT, UPDATE, or REMOVE) starts the Lambda function, which can then analyze the stream records to carry out other functions like data indexing, alerts, or synchronization with other services.
+Nevertheless, DynamoDB streams occasionally neglect to call the Lambda function, which results in the modifications going unprocessed. Now let's explore the troubleshooting procedures for this problem.
+
+
+#### 1. Ensure DynamoDB Streams Are Enabled
+Making sure DynamoDB Streams are enabled for your table is the first step. The Lambda function won't get any events if streams aren't enabled.
+Open the Management Console for AWS.
+Go to Your Table > DynamoDB > Tables > Exports and Streams.
+Make sure DynamoDB Streams is enabled and configured to include NEW_IMAGE at the very least.
+Note: What data is recorded depends on the type of stream view. Make sure your view type is NEW_IMAGE or NEW_AND_OLD_IMAGES for a typical INSERT operation.
+
+
+#### 2. Check Lambda Trigger Configuration
+A common reason for Lambda functions not being invoked by DynamoDB is an improperly configured trigger.
+Open the AWS Lambda console.
+Select your Lambda function and navigate to Configuration > Triggers.
+Make sure your DynamoDB table's stream is listed as a trigger.
+If it's not listed, you'll need to add it manually:
+Click on Add Trigger, select DynamoDB, and then configure the stream from the dropdown.
+This associates your DynamoDB stream with your Lambda function, ensuring events are sent to the function when table items change.
+
+#### 3. Examine Lambda Function Permissions
+To read from the DynamoDB stream, your Lambda function needs certain permissions. It won't be able to use the records if it doesn't have the required IAM policies.
+
+Ensure your Lambda function's IAM role includes these permissions:
+```
+json
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:DescribeStream",
+                "dynamodb:ListStreams"
+            ],
+            "Resource": "arn:aws:dynamodb:region:account-id:table/your-table-name/stream/*"
+        }
+    ]
+}
+```
+
+Lambda can read and process records from the DynamoDB stream thanks to these actions.
+
+#### 4. Check for CloudWatch Logs
+
+Lambda logs detailed information about its invocations and errors in AWS CloudWatch. To check if the function is being invoked (even if it's failing):
+
+1. Navigate to the **CloudWatch** console.
+2. Go to **Logs** and search for your Lambda function's log group (usually named `/aws/lambda/<function-name>`).
+3. Look for any logs related to your Lambda function to identify issues or verify that it's not being invoked at all.
+
+> **Note:** If the function is not being invoked, there might be an issue with the trigger or stream configuration.
+
+
+#### 5. Test with Manual Insertions
+Use the AWS console to manually add an item to your DynamoDB table to see if your setup is functioning:
+Click Explore table items under DynamoDB > Tables > Your Table.
+After filling out the required data, click Create item and then Save.
+Your Lambda function should be triggered by this. After that, verify that the function received the event by looking at your Lambda logs in CloudWatch.
+
+
+#### 6. Verify Event Structure
+Your Lambda function's handling of the incoming event data may be the problem if it is being called but failing. Make that the code in your Lambda function is handling the event appropriately. An example event payload that Lambda gets from a DynamoDB stream is as follows:
+```
+json
+
+{
+    "Records": [
+        {
+            "eventID": "1",
+            "eventName": "INSERT",
+            "eventSource": "aws:dynamodb",
+            "dynamodb": {
+                "Keys": {
+                    "Id": {
+                        "S": "123"
+                    }
+                },
+                "NewImage": {
+                    "Id": {
+                        "S": "123"
+                    },
+                    "Name": {
+                        "S": "Test Name"
+                    }
+                }
+            }
+        }
+    ]
+}
+```
+
+Make sure this structure is handled correctly by your Lambda function. Your function won't process the event as intended if the NewImage or Keys section is absent from your code or if the data format is off.
+Lambda code example
+Here is a basic illustration of how to use your Lambda function to handle a DynamoDB stream event:
+```
+python
+
+import json
+
+def lambda_handler(event, context):
+    # Log the received event for debugging
+    print("Received event: ", json.dumps(event, indent=4))
+    
+    # Process each record in the event
+    for record in event['Records']:
+        if record['eventName'] == 'INSERT':
+            new_image = record['dynamodb'].get('NewImage', {})
+            document_id = new_image.get('Id', {}).get('S')
+            
+            if document_id:
+                print(f"Processing document with ID: {document_id}")
+            else:
+                print("No document ID found.")
+    
+    return {
+        'statusCode': 200,
+        'body': 'Function executed successfully.'
+    }
+```
+
+#### 7. Check AWS Region and Limits
+Make sure the Lambda function and your DynamoDB table are located in the same AWS region. The stream won't activate the Lambda function if they are in different geographical locations.
+Check the AWS service restrictions as well:
+Lambda concurrency: Make that the concurrency limit isn't being reached by your function.
+Throughput supplied by DynamoDB: Your Lambda triggers may be missed or delayed if your DynamoDB table has more read/write capacity than is allocated.
+
+#### 8. Retry Behavior
+There is an inherent retry mechanism in lambda functions that are triggered by DynamoDB Streams. AWS may eventually stop retrying if your Lambda function fails several times, depending on your configuration.
+To guarantee that no data is lost during processing, make sure your Lambda function retries correctly and handles mistakes graciously.
+
+
+### Conclusion
+
+A misconfiguration in the stream settings, IAM permissions, or event processing in the Lambda code may be the cause if DynamoDB streams are not triggering your Lambda function. You should be able to identify and resolve the issue by following these procedures and debugging the problem with CloudWatch Logs.
+The most important thing is to make sure your Lambda function has the required rights to read from the DynamoDB stream and handle the event data appropriately, as well as that the stream is enabled and connected to your Lambda function.
+Enjoy your troubleshooting!

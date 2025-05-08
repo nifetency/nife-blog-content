@@ -1,0 +1,88 @@
+---
+title: 'Launching Your Kubernetes Cluster with Deployment: Deployment in K8s for DevOps'
+description: "Learn how to effectively deploy applications in Kubernetes (k8s) with this comprehensive guide. Explore key concepts like replica sets, declarative configuration, scaling, version management, and self-healing. Gain hands-on experience with creating a deployment YAML file and using `kubectl` commands for deploying and managing your Kubernetes clusters."
+date: "2023-09-23"
+redirect_from: 
+  - https://resource.nife.io/launching-your-kubernetes-cluster-with-deployment-devops/
+tags: [Application Deployment, CI and CD, DevOps, DevOps Pipeline, Kubernetes]
+hero: ../../../defaultHero.jpg
+author: Nida Sahar
+keywords: [Kubernetes Deployment, Kubernetes Guide, DevOps, CI/CD, Application Deployment, Kubernetes YAML, Kubernetes Cluster]
+---
+
+In this article, we'll be exploring deployment in Kubernetes (k8s). The first step will be to dive deep into some basic concepts related to deployment, followed by a deeper dive into the deployment process.
+
+Let's get some basics straight.
+
+## **What is Deployment in Kubernetes (k8s)?**
+
+
+<img src={require('./img/Kubernetes-Deployment.png').default} alt="cloud gaming services" width="400" height="250"/>
+<br/>
+
+
+ 
+In Kubernetes, deployment is a high-level resource object that manages [application](/blog/application-deployment-and-the-various-deployment-types-explained/) deployment. It ensures applications are in the desired state all the time. It enables you to define and update the desired state of your application, including the number of replicas it should be running on. It also handles updates and rollbacks seamlessly.
+
+To get a better [understanding of deployment](/blog/understanding-continuous-integration-ci-and-continuous-deployment-cd-in-devops/) in Kubernetes let's explore some key aspects.
+
+**Replica Sets: **Behind the scenes, deployment creates and manages replica sets. Replica sets ensure that the desired number of pods are available all the time. If for some reason a pod gets deleted, it gets replaced by a new one by a replica set.
+
+**Declarative Configuration: **The desired state of your applications is defined in a declarative manner in deployment. This is done using YAML or JSON files. In these files, you specify information like the number of replicas, deployment strategies, and container image.
+
+**Scaling: **You can control the scaling of your application from deployment configuration. You can scale it up or down whenever needed. When you change the configuration Kubernetes automatically adds or removes pods.
+
+**Version Management: **With deployments, you can easily keep track of different versions of your applications. As soon as you make any changes a new version is created. This practice helps you roll back to the previous version anytime in case of any problems.
+
+**Self-Healing: **The deployment controller automatically detects faulty pods and replaces them to ensure proper functioning.
+
+All the above aspects of Kubernetes deployments make them a crucial tool for DevOps. Now that you've understood the concept of Kubernetes deployment. It's time to get your hands dirty with the practical aspect of deployment.
+
+## **Hands-On Deployment:**
+
+We've already discussed the importance of declarative configuration. Let's explore how you can create a Kubernetes deployment YAML file. This file is essential for defining the desired state of the application in the cluster.
+
+### **Specifying Containers and Pods:**
+
+When creating a YAML file you'll have to specify everything related to your application. Let's break it down.
+
+**apiVersion and kind: **The first step is to specify the API version and application kind. You can do that using **apps/v1 **and **Deployment**.
+
+**Metadata: **It is the name and label you specify for your deployment. Make sure to make it unique with your Kubernetes cluster.
+
+**Specs: **Now this is the part in the file where you set the desired state of your application.
+
+- **Replicas:** This is where you specify the desired number of replicas you want to run your application on. For example, by setting **replicas:5** you can create 5 identical pods.
+
+* **Selector: **This is where you match the deployment with the pods it manages. You can do that through labels. Define a **selector** with **match labels** to select pods based on labels.
+
+- **Template: **This is where you define the structure of pods.
+
+* **Metadata: **This is where labels are defined to specify the pods controlled by this deployment
+
+- **Spec: **In this section, you define containers that make up your application. In this section, you define the name of the container, the image to use, the ports to expose, the environment variable, and the CPU memory usage limit.
+
+---
+
+**Strategy: **This is the section where you can define the update strategy for the deployment. If you want to lower the risk of downtime you can specify a rolling update strategy. You can use **maxUnavailable** and **maxSurge** to specify how many pods you want during an update.
+
+### **Deploying your Application:**
+
+<img src={require('./img/cloud-application-deployment.png').default} alt="cloud application deployment" width="400" height="250"/>
+<br/>
+
+
+ 
+After the creation of the YAML file, it's time to use it in your Kubernetes cluster for deployment. Let's take a deep dive into the [deployment process](/blog/simplify-your-deployment-process-cheap-cloud-alternative/).
+
+You can deploy your application to the Kubernetes cluster using the **kubectl apply** command. Here is a step-by-step guide.
+
+Run **kubectl apply -f deployment.yaml. **This command will instruct Kubernetes to create or update resources defined in the YAML file. Kubernetes will act on the information in the file and will create the mentioned number of pods with the defined configurations.
+
+Once you've used the command you can validate it with **Kubectl get pods. **This command will give you real-time information about the creation of pods and their state. It gives valuable information about your application deployment.
+
+It's crucial to monitor the deployment progress to ensure proper functioning. For this purpose, you can run commands like** kubectl rollout status. **This command gives you information about the update status if you've configured your deployment for updates. It provides you with real-time information about the pods successfully rolled out.
+
+There is always room for error. In case you find any errors during monitoring you can inspect individual pods using **kubectl describe pod **and **kubectl logs **commands.
+
+That's all for today. Hope this guide helps you increase your proficiency in using Kubernetes as a DevOps tool. If you like this story give us a clap and follow our account for more amazing content like this. We'll be back with new content soon.

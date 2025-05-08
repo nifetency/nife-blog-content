@@ -1,0 +1,145 @@
+---
+title: "How to Handle PostgreSQL Cursors in Java: A Practical Guide"
+description: "Learn how to efficiently interact with PostgreSQL cursors in Java using JDBC and CallableStatements."
+date: "2025-04-04"
+
+author: "Nida Sahar"
+keywords: [PostgreSQL Cursors, Java Database, JDBC CallableStatement, Database Optimization, Big Data Management, PostgreSQL Cursor Example, Handling Large Datasets in Java, CallableStatement in Java, Java Stored Procedures, Efficient Data Retrieval]
+tags: [PostgreSQL, Java, JDBC, Database]
+---
+It could be a little difficult to use PostgreSQL cursors, especially if you need to use them in Java applications.  If you've worked with relational databases and experimented with PL/SQL (Oracle's procedural language), you might recognise cursors.  On the other hand, PostgreSQL handles and returns cursors in a different way.
+
+
+This blog post will show you how to programmatically retrieve cursor data, interact with PostgreSQL cursors in Java, and give some real-world examples.
+
+
+## What's a Cursor Anyway?
+
+<img src={require('./img/5216607.jpg').default} alt="An illustration of a computer cursor with a question mark, representing the concept" width="500" height="350"/>
+<br/>
+
+Using a cursor, which is essentially a pointer, you can get rows from a query one at a time or in batches without putting the entire result set into memory all at once.  Think of it as a way to handle large datasets without overtaxing your computer.
+
+ In a database, you often get all of the results at once when you run a query.  By chunking the data or fetching rows at a time, a cursor can handle large amounts of data, improving performance and resource management.
+
+ It becomes interesting when you want to handle it in Java since a PostgreSQL method can return a cursor.
+
+
+## Setting Up a Cursor in PostgreSQL
+
+<img src={require('./img/2808316.jpg').default} alt="Step-by-step guide on setting up a cursor in PostgreSQL with example code" width="500" height="350"/>
+<br/>
+
+Lets start with a [PostgreSQL](https://www.postgresql.org/) function that returns a cursor. Well assume you have a table called `employees` with columns like `employee_id`, `first_name`, and `salary`. Heres a basic function that opens a cursor for this table:
+
+```sql
+CREATE OR REPLACE FUNCTION get_employee_cursor()
+RETURNS REFCURSOR AS $$
+DECLARE
+    emp_cursor REFCURSOR;
+BEGIN
+    OPEN emp_cursor FOR
+    SELECT employee_id, first_name, salary
+    FROM employees;
+    RETURN emp_cursor;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+This function `get_employee_cursor` opens a cursor for a simple `SELECT` query on the `employees` table and returns it.
+
+## How to Fetch the Cursor Data in Java
+
+To communicate with the database in Java, we can utilize [JDBC (Java Database Connectivity)](https://www.geeksforgeeks.org/introduction-to-jdbc/). Because the function that returns the cursor is a callable function, you must use a `CallableStatement` when working with cursors in PostgreSQL. Here's how to accomplish that:
+
+```java
+import java.sql.*;
+
+public class CursorExample {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:postgresql://localhost:5432/your_database";
+        String user = "your_user";
+        String password = "your_password";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            // Enable transactions (required for cursors in PostgreSQL)
+            connection.setAutoCommit(false);
+
+            // Step 1: Call the function that returns a cursor
+            try (CallableStatement callableStatement = connection.prepareCall("{ ? = call get_employee_cursor() }")) {
+                callableStatement.registerOutParameter(1, Types.OTHER); // Cursor is of type "OTHER"
+                callableStatement.execute();
+
+                // Step 2: Retrieve the cursor
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(1);
+
+                // Step 3: Iterate through the cursor and display results
+                while (resultSet.next()) {
+                    int employeeId = resultSet.getInt("employee_id");
+                    String firstName = resultSet.getString("first_name");
+                    double salary = resultSet.getDouble("salary");
+
+                    System.out.printf("Employee ID: %d, Name: %s, Salary: %.2f%n", employeeId, firstName, salary);
+                }
+
+                // Close the ResultSet
+                resultSet.close();
+            }
+
+            // Commit the transaction
+            connection.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+## Breaking Down the Code
+
+<img src={require('./img/Wavy_Bus-34_Single-10.jpg').default} alt="A step-by-step breakdown of code logic with annotations" width="500" height="350"/>
+<br/>
+
+### Connection Setup
+- We connect to PostgreSQL using the `DriverManager.getConnection()` method.
+- `connection.setAutoCommit(false)` is crucial because cursors in PostgreSQL work within a transaction. By disabling auto-commit, we ensure the transaction is handled properly.
+
+### Calling the Cursor-Returning Function
+- We use a `CallableStatement` to execute the function `get_employee_cursor()`, which returns a cursor. This is similar to calling a stored procedure in other databases.
+- We register the output parameter (the cursor) using `registerOutParameter(1, Types.OTHER)`. In JDBC, cursors are treated as `Types.OTHER`.
+
+### Fetching Data from the Cursor
+- Once the cursor is returned, we treat it like a `ResultSet`. The cursor essentially acts like a pointer that we can iterate over.
+- We loop through the result set using `resultSet.next()` and retrieve the data (like `employee_id`, `first_name`, and `salary`).
+
+### Commit the Transaction
+- Since the cursor is part of a transaction, we commit the transaction after were done fetching and processing the data.
+
+## When Would You Use Cursors in Java?
+
+### Managing Big Data Sets
+It could take a lot of memory to load all of your records at once if you have a lot of them—millions, for instance.  By retrieving the data in chunks via a cursor, you may conserve memory.
+
+
+### Performance Optimization
+For large result sets, it is usually more efficient to fetch data in batches or row by row, which lessens the strain on your database and application.
+
+
+### Streaming Data
+Using cursors to get and process data in real time is a smart strategy when working with streams.
+
+## Final Thoughts
+
+Although using Java cursors in PostgreSQL might seem a bit more difficult than in Oracle, massive data sets can be efficiently managed with the right approach.  By utilising `CallableStatement` to obtain the cursor and iterating over the result set, you may make full use of Java's cursors without encountering memory or performance issues.
+
+ Regardless of whether you're working with large datasets or need more exact control over how data is pulled from the database, cursors are a helpful addition to any PostgreSQL toolbox.  Just be aware that, unlike Oracle, PostgreSQL requires the explicit retrieval of cursor data, but it is easy to comprehend and effective once you do.
+
+ For deploying and managing databases efficiently, check out [Nife.io](https://nife.io/), a cutting-edge platform that simplifies database deployment and scaling.
+
+learn more about [Database deployment Guide](https://docs.nife.io/docs/UI-Guide/database). 
+
+For more details, check out the official PostgreSQL documentation on [Cursors](https://www.postgresql.org/docs/current/plpgsql-cursors.html).
+
+

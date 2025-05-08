@@ -1,0 +1,159 @@
+---
+title: 'Handling Errors in C# the Easy Way'
+description: "Learn how to handle errors in C# using a custom error response object. This guide covers structured error tracking, JSON deserialization handling, and ensuring your application doesn't crash when unexpected issues arise."
+date: "2025-03-17"
+tags: [C#, Error Handling, JSON, Exception Handling, Logging, Debugging, Software Development, .NET, Programming, Best Practices]
+author: Nida Sahar
+keywords: [C# Error Handling, Exception Handling in C#, JSON Deserialization, Logging Errors, Debugging in C#, .NET Development, Custom Error Responses, Application Stability]
+---
+
+<img src={require('./img/11075021.jpg').default} alt="nginx and docker" width="650" height="450"/>
+<br/>
+
+You are aware that things don't always go as planned if you have ever dealt with [C#](https://www.w3schools.com/cs/index.php) or any type of online API. There are instances when you get strange JSON, when a field is missing, and when—well—things just break. The good news is that you don't have to let your app crash and burn because of such problems. We can apprehend them, record them, and continue on.
+
+I'll demonstrate how to use a custom error response object to handle errors in C# in this post. It's similar to building a safety net for your software so that it doesn't go into full panic mode when something goes wrong.
+
+## Why Do We Care About Custom Error Responses?
+
+It's not always sufficient to simply log or print an error to the console when it occurs in your application. You may want to provide more information about the issue, track several faults that occur simultaneously, or simply deliver a kind, easy-to-read message to the user. A custom error answer can help with that.
+
+With a custom error response object, you can:
+- Track different types of errors.
+- Organize your errors into categories (so you know if it's a JSON issue, a database issue, etc.).
+- Handle the error, log it, and then move on without crashing the app.
+
+## Setting Up Our Custom Error Object
+
+<img src={require('./img/6199776.jpg').default} alt="nginx and docker" width="650" height="550"/>
+<br/>
+
+Let's start by setting up a basic error response object. This will hold our error messages in a dictionary, so we can [track multiple types of errors](https://tutorials.eu/how-to-catch-multiple-exceptions-c-sharp/).
+
+Here's how you can do it:
+
+```csharp
+public class ErrResponse
+{
+    public string Message { get; set; }
+    public Dictionary<string, List<string>> Errors { get; set; }
+}
+```
+
+- **Message**: This is just a generic message about what went wrong.
+- **Errors**: This is a dictionary that'll hold all the different errors. Each key will represent an error type (like "JsonError" or "GeneralError"), and the value will be a list of error messages. This way, we can keep things organized.
+
+## Deserializing JSON and Handling Errors
+
+Let's say you're deserializing some JSON data, but there's a chance it could fail. Instead of letting the program crash, we can catch that error, store the details in our custom error response, and continue running. Here's how to do it:
+
+```csharp
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+
+public class Program
+{
+    public static void Main()
+    {
+        string jsonContent = /* your JSON string here */;
+        ErrResponse errResponse;
+
+        try
+        {
+            // Try to deserialize the JSON
+            errResponse = JsonConvert.DeserializeObject<ErrResponse>(jsonContent);
+
+            if (errResponse != null)
+            {
+                Console.WriteLine("Deserialization successful.");
+                Console.WriteLine($"Message: {errResponse.Message}");
+
+                if (errResponse.Errors != null)
+                {
+                    foreach (var error in errResponse.Errors)
+                    {
+                        Console.WriteLine($"Error Key: {error.Key}, Values: {string.Join(", ", error.Value)}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Deserialization resulted in a null response.");
+            }
+        }
+        catch (JsonException ex)
+        {
+            // If JSON deserialization fails, log it
+            errResponse = new ErrResponse
+            {
+                Message = "There was an issue with the JSON.",
+                Errors = new Dictionary<string, List<string>>()
+            };
+
+            // Add the error to the "JsonError" category
+            AddError(errResponse, "JsonError", ex.Message);
+            AddError(errResponse, "JsonError", ex.StackTrace);
+
+            Console.WriteLine($"JSON Deserialization error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Catch any other errors that might happen
+            errResponse = new ErrResponse
+            {
+                Message = "Something unexpected went wrong.",
+                Errors = new Dictionary<string, List<string>>()
+            };
+
+            // Log the general error
+            AddError(errResponse, "GeneralError", ex.Message);
+            AddError(errResponse, "GeneralError", ex.StackTrace);
+
+            Console.WriteLine($"Unexpected error: {ex.Message}");
+        }
+
+        // Continue running the app, no matter what
+        Console.WriteLine("The program keeps on running...");
+    }
+
+    // Utility to add errors to the response
+    private static void AddError(ErrResponse errResponse, string key, string message)
+    {
+        if (string.IsNullOrEmpty(message)) return;
+
+        if (errResponse.Errors.ContainsKey(key))
+        {
+            errResponse.Errors[key].Add(message);
+        }
+        else
+        {
+            errResponse.Errors[key] = new List<string> { message };
+        }
+    }
+}
+```
+
+## What's Going On Here?
+<img src={require('./img/8712631.jpg').default} alt="nginx and docker" width="650" height="550"/>
+<br/>
+
+- **[Deserialization](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/deserialization)**: We attempt to create our `ErrResponse` object from the JSON. Fantastic if it does. If not, the error is detected.
+- **Catching JSON Errors**: If the JSON is incorrect, we detect it and use a `JsonError` value to add it to our `Errors` dictionary. The error notice and stack trace are then displayed for simpler debugging.
+- **General Error Handling**: We detect and record any unexpected events (such as database problems or network failures) under the `GeneralError` key.
+- **Program Doesn't Crash**: The software continues to operate after the problem has been handled. Thus, without ruining anything, you can log issues, alert someone, or simply go on.
+
+## Why This Is Useful
+
+- **It Keeps Things Neat**: We store errors in an organised manner that makes it simple to see what's wrong, as opposed to simply throwing them around.
+- **Multiple Errors? No Problem**: We don't have to overwrite or overlook anything when we use a dictionary to track numerous faults at once.
+- **No App Crashes**: In the event that something breaks, the program continues to operate. You recognise the mistake, correct it, and move on with your life.
+
+## Conclusion
+
+Error management doesn't have to be difficult. You may effortlessly handle failures, record crucial information, and maintain the functionality of your program by utilising a custom error response object in C#. There are ways to deal with issues like a broken JSON string or an unplanned crash without everything exploding.
+
+Therefore, bear in mind to identify the mistake, manage it politely, and continue working on your program the next time something goes wrong.
+
+If you're looking for [cutting-edge features for cloud deployment](https://nife.io/oikos/features), check out what Oikos by [Nife](https://nife.io) has to offer.
+

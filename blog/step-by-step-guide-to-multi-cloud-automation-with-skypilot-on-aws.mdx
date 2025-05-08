@@ -1,0 +1,256 @@
+---
+title: 'Step-by-Step Guide to Multi-Cloud Automation with SkyPilot on AWS'
+description: 'SkyPilot is a platform that allows users to execute operations such as machine learning or data processing across many cloud services (such as Amazon Web Services, Google Cloud, or Microsoft Azure) without having to understand how each cloud works separately.'
+date: "2024-10-29"
+tags: [AWS,SkyPilot,Cloud Automation,Multi-Cloud,Cost Optimization,Cloud Computing]
+author: Nida Sahar
+keywords: [SkyPilot AWS integration,multi-cloud operations,cloud cost savings,cloud automation tools,SkyPilot setup guide,data processing in the cloud,AWS CLI setup,cloud server automation]
+---
+
+
+SkyPilot is a platform that allows users to execute operations such as machine learning or data processing across many cloud services (such as Amazon Web Services, Google Cloud, or Microsoft Azure) without having to understand how each cloud works separately.
+
+<img src={require('./img/skypilot-wide-light-1k.png').default} alt="Skypilot logo" width="600" height="150"/>
+<br/>
+
+In simple terms, it does the following:
+
+**Cost Savings**: It finds the cheapest cloud service and automatically runs your tasks there, saving you money.
+
+**Multi-Cloud Support>**: You can execute your jobs across several clouds without having to change your code for each one.
+
+**Automation**: SkyPilot handles technical setup for you, such as establishing and stopping cloud servers, so you don't have to do it yourself.
+
+**Spot Instances**:It employs a unique form of cloud server that is less expensive (but may be interrupted), and if it is interrupted, SkyPilot instantly transfers your task to another server.
+
+
+### Getting Started with SkyPilot on AWS
+
+#### Prerequisites
+
+Before you start using SkyPilot, ensure you have the following:
+
+##### 1. AWS Account
+To create and manage resources, you need an active AWS account with the relevant permissions. 
+
+- EC2 Instances: Creating, modifying, and terminating EC2 instances.
+
+- IAM Roles: Creating and managing IAM roles that SkyPilot will use to interact with AWS services.
+
+- Security Groups: Setting up and modifying security groups to allow necessary network access.
+
+You can attach policies to your IAM user or role using the AWS IAM console to view or change permissions.
+
+##### 2. Create IAM Policy for SkyPilot
+You should develop a custom IAM policy with the necessary rights so that your IAM user may utilize SkyPilot efficiently. Proceed as follows: 
+
+**Create a Custom IAM Policy**:
+
+- Go to the AWS Management Console.
+- Navigate to IAM (Identity and Access Management).
+- Click on Policies in the left sidebar and then Create policy.
+- Select the JSON tab and paste the following policy:
+```
+json
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Describe*",
+                "ec2:RunInstances",
+                "ec2:TerminateInstances",
+                "ec2:CreateSecurityGroup",
+                "ec2:DeleteSecurityGroup",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:RevokeSecurityGroupIngress",
+                "ec2:CreateTags",
+                "iam:CreateInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:PassRole",
+                "iam:CreateRole",
+                "iam:PutRolePolicy",
+                "iam:DeleteRole",
+                "iam:DeleteInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+```
+
+- Click Next: Tags and then Next: Review.
+- Provide a name for the policy (e.g., SkyPilotPolicy) and a description.
+- Click Create policy to save it.
+
+
+Attach the Policy to Your IAM User:
+- Navigate back to Users and select the IAM user you created earlier.
+- Click on the Permissions tab.
+- Click Add permissions, then Attach existing policies directly.
+- Search for the policy you just created (e.g., SkyPilotPolicy) and select it.
+- Click Next: Review and then Add permissions.
+
+
+##### 3. Python
+Make sure your local computer is running Python 3.7 or later. The  official Python website. offers the most recent version for download.
+
+Use the following command in your terminal or command prompt to confirm that Python is installed: 
+```
+python --version
+```
+If Python is not installed, follow the instructions on the Python website to install it.
+
+##### 4. SkyPilot Installed
+You need to have SkyPilot installed on your local machine.
+SkyPilot supports the following operating systems:
+- Linux
+- macOS
+- Windows (via Windows Subsystem for Linux (WSL))
+
+To install SkyPilot, run the following command in your terminal:
+```
+pip install skypilot[aws]
+```
+
+After installation, you can verify if SkyPilot is correctly installed by running:
+```
+sky --version
+```
+
+The installation of SkyPilot is successful if the command yields a version number.
+
+
+##### 5. AWS CLI Installed
+To control AWS services via the terminal, you must have the AWS Command Line Interface (CLI) installed on your computer.
+
+To install the AWS CLI, run the following command:
+```
+pip install awscli
+```
+
+After installation, verify the installation by running:
+```
+aws --version
+```
+If the command returns a version number, the AWS CLI is installed correctly.
+
+##### 6. Setting Up AWS Access Keys
+
+To interact with your AWS account via the CLI, you'll need to configure your access keys. Here's how to set them up:
+
+Create IAM User and Access Keys:
+- Go to the AWS Management Console.
+- Navigate to IAM (Identity and Access Management).
+- Click on Users and then select user which you created before.
+- Click on Security Credentials.
+- Click on Create Access Key.
+- In use case select Command Line Interface.
+- Give the confirmation and click on next.
+- Click on Create Access Key and download the Access key.
+
+Configure AWS CLI with Access Keys:
+- Run the following command in your terminal to configure the AWS CLI:
+```
+aws configure
+```
+
+When prompted, enter your AWS access key ID, secret access key, default region name (e.g., us-east-1), and the default output format (e.g., json).
+
+Example:
+```
+AWS Access Key ID [None]: YOUR_ACCESS_KEY_ID
+
+AWS Secret Access Key [None]: YOUR_SECRET_ACCESS_KEY
+
+Default region name [None]: us-east-1
+
+Default output format [None]: json
+```
+
+Once the AWS CLI is configured, you can verify the configuration by running:
+
+```
+aws sts get-caller-identity
+```
+
+This command will return details about your AWS account if everything is set up correctly.
+
+### Launching a Cluster with SkyPilot
+
+Once you have completed the prerequisites, you can launch a cluster with SkyPilot.
+##### 1. Create a Configuration File
+Create a file named sky-job.yaml with the following content:
+
+Example:
+
+```
+resources:
+  cloud: AWS
+  instance_type: t2.medium
+  region: us-west-2
+  ports:
+    - 80
+
+run: |
+  docker run -d -p 80:80 nginx:latest
+```
+
+##### 2. Launch the Cluster
+In your terminal, navigate to the directory where your sky.yaml file is located and run the following command to launch the cluster:
+
+```
+sky launch sky-job.yaml
+```
+
+This command will provision the resources specified in your sky.yaml file.
+
+##### 3. Monitor the Cluster Status
+To check the status of your cluster, run:
+```
+sky status
+```
+
+##### 4. Terminate the Cluster
+If you want to terminate the cluster, you can use the following command:
+
+```
+sky terminate sky-job.yaml
+```
+This command will clean up the resources associated with the cluster.
+
+##### 5. Re-launching the Cluster
+If you need to launch the cluster again, you can simply run:
+
+```
+sky launch sky-job.yaml
+```
+This command will recreate the cluster using the existing configuration.
+
+#### Conclusion
+Now that you've completed the above steps, you should be able to install SkyPilot, launch an AWS cluster, and properly manage it. This guide will help you get started with SkyPilot by providing a complete introduction. Good luck with the clustering!
+
+##### Useful Resources for SkyPilot on AWS
+
+Readers wishing to extend their expertise or explore other configuration possibilities, here are some valuable resources:
+
+- **SkyPilot Official Documentation**  
+  Visit the [SkyPilot Documentation](https://skypilot.readthedocs.io/en/latest/docs/index.html) for comprehensive guidance on setup, configuration, and usage across cloud platforms.
+
+- **AWS CLI Installation Guide**  
+  Learn how to install the AWS CLI by visiting the [official AWS CLI Documentation](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html).
+
+- **Python Installation**  
+  Ensure Python is correctly installed on your system by following the [Python Installation Guide](https://www.python.org/downloads/).
+
+- **Setting Up IAM Permissions for SkyPilot**  
+  SkyPilot requires specific AWS IAM permissions. Learn how to configure these by checking out the [IAM Policies Documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html).
+
+- **Running SkyPilot on AWS**  
+  Discover the process of launching and managing clusters on AWS with the SkyPilot [Getting Started Guide](https://skypilot.readthedocs.io/en/latest/docs/getting-started.html).
+
+- **Using Spot Instances with SkyPilot**  
+  Learn more about cost-saving with Spot Instances in the [SkyPilot Spot Instances Guide](https://skypilot.readthedocs.io/en/latest/docs/using-spot-instances.html).

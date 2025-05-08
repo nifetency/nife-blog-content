@@ -1,0 +1,169 @@
+---
+title: "How to Delete Specific Lines from a File Using Line Numbers"
+description: "Learn multiple ways to remove specific lines from a file using tools like sed, awk, Python, and more—with easy-to-follow examples."
+date: "2025-04-16"
+tags: [File Manipulation, Linux, Scripting, Python, Shell, DevOps]
+author: Nida Sahar
+keywords: [delete lines by number, sed remove lines, awk file editing, Python file processing, command-line file edit]
+---
+
+
+
+When you're working with text files—be it config files, logs, or source code—you may need to delete specific lines based on their line numbers. This might sound intimidating, but it’s actually quite easy once you know which tool to use.
+
+In this post, we’ll walk through several methods to remove lines using line numbers, using command-line tools like `sed`, `awk`, and even Python. Whether you're a beginner or a seasoned developer, there’s a solution here for you.
+
+---
+
+## The Basic Idea
+
+<img src={require('./img/6437614.jpg').default} alt=" " width="500" height="450"/>
+<br/>
+
+To delete a specific range of lines from a file:
+
+1. Identify the **start line** and **end line**.
+2. Use a tool or script to remove the lines between those numbers.
+3. Save the changes back to the original file.
+
+Let’s break this down by method.
+
+---
+
+## 1. Using `sed` (Stream Editor)
+
+<img src={require('./img/3301602.jpg').default} alt="" width="500" height="450"/>
+<br/>
+
+`sed` is a command-line utility that’s perfect for modifying files line-by-line.
+
+### Basic Syntax
+```bash
+sed 'START_LINE,END_LINEd' filename > temp_file && mv temp_file filename
+```
+
+- Replace `START_LINE` and `END_LINE` with actual numbers.
+- `d` tells `sed` to delete those lines.
+
+### Example
+To delete lines 10 through 20:
+```bash
+sed '10,20d' myfile.txt > temp_file && mv temp_file myfile.txt
+```
+
+### With Variables
+```bash
+START_LINE=10
+END_LINE=20
+sed "${START_LINE},${END_LINE}d" myfile.txt > temp_file && mv temp_file myfile.txt
+```
+
+📚 [More on sed line deletion](https://www.gnu.org/software/sed/manual/sed.html#Deleting-Lines)
+
+---
+
+## 2. Using `awk`
+
+`awk` is a pattern scanning tool. It’s ideal for skipping specific lines.
+
+### Syntax
+```bash
+awk 'NR < START_LINE || NR > END_LINE' filename > temp_file && mv temp_file filename
+```
+
+### Example
+
+
+
+```bash
+awk 'NR < 10 || NR > 20' myfile.txt > temp_file && mv temp_file myfile.txt
+```
+
+This prints all lines **except** lines 10 through 20.
+
+📚 [Learn more about awk](https://www.gnu.org/software/gawk/manual/gawk.html)
+
+---
+
+## 3. Using `head` and `tail`
+
+Perfect when you only need to chop lines off the start or end.
+
+### Example
+Delete lines 10 to 20:
+```bash
+head -n 9 myfile.txt > temp_file
+tail -n +21 myfile.txt >> temp_file
+mv temp_file myfile.txt
+```
+
+- `head -n 9` gets lines before line 10.
+- `tail -n +21` grabs everything from line 21 onward.
+
+📚 [tail command explained](https://man7.org/linux/man-pages/man1/tail.1.html)
+
+---
+
+## 4. Using `perl`
+
+`perl` is great for more advanced file manipulation.
+
+### Syntax
+```bash
+perl -ne 'print unless $. >= START_LINE && $. <= END_LINE' filename > temp_file && mv temp_file filename
+```
+
+### Example
+```bash
+perl -ne 'print unless $. >= 10 && $. <= 20' myfile.txt > temp_file && mv temp_file myfile.txt
+```
+
+- `$.` is the line number variable in `perl`.
+
+📚 [Perl I/O Line Numbering](https://perldoc.perl.org/perlvar#%24.)
+
+---
+
+## 5. Using Python
+
+For full control or if you’re already using Python in your workflow:
+
+### Example
+```python
+start_line = 10
+end_line = 20
+with open("myfile.txt", "r") as file:
+    lines = file.readlines()
+
+with open("myfile.txt", "w") as file:
+    for i, line in enumerate(lines):
+        if i < start_line - 1 or i > end_line - 1:
+            file.write(line)
+```
+
+Python is especially useful if you need to add logic or conditions around what gets deleted.
+
+📚 [Working with files in Python](https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files)
+
+---
+
+## Conclusion
+
+<img src={require('./img/20943639.jpg').default} alt="" width="500" height="450"/>
+<br/>
+
+There are plenty of ways to delete lines from a file based on line numbers:
+
+- Use **`sed`** for simple, fast command-line editing.
+- Choose **`awk`** for conditional line selection.
+- Go with **`head`/`tail`** for edge-case trimming.
+- Try **`perl`** if you’re comfortable with regex and quick one-liners.
+- Opt for **Python** when you need logic-heavy, readable scripts.
+
+
+
+Explore [Nife.io](https://nife.io) for modern cloud infrastructure solutions, or check out [OIKOS](https://nife.io/oikos/features) to see how edge orchestration is done right.
+
+
+---
+

@@ -1,0 +1,126 @@
+---
+title: 'Application Deployment & The Various Deployment Types Explained'
+description: "Explore the different types of application deployment strategies, including In-Place, Blue/Green, Canary, Ramped, Shadow, and A/B Testing Deployments. Understand how these strategies impact application delivery, minimize downtime, and optimize performance for both development and production environments. Learn about the benefits and drawbacks of each approach to make informed decisions for your deployment needs."
+keywords: [Application Deployment, Deployment Strategies, Cloud Infrastructure, Blue/Green Deployment, Canary Deployment, Ramped Deployment, Shadow Deployment, A/B Testing Deployment, Cloud Technology, Hybrid Cloud Solutions]
+date: "2023-08-30"
+redirect_from: 
+            - https://resource.nife.io/application-deployment-and-the-various-deployment-types-explained/
+tags: [Application Deployment, Cloud Infrastructure, Cloud Technology, Deployment, Hybrid Cloud Solutions, Types of Deployment]
+hero: ./img/wp-content-uploads-2023-08-app-deployment-in-infrastructure-resource-300x186.png
+author: Nida Sahar
+---
+
+### What is Deployment in Simple Words?
+
+Deployment is a process that enables you to retrieve and enable code from version control so that it can be made readily available to the public in an automated fashion. It involves delivering applications, modules, updates, and patches from developers to users. The methods used by developers to build, test, and deploy new code impact how quickly a product can respond to changes and the quality of each update.
+
+
+
+### What is the Use of Deployment?
+
+Deployment [automation](/blog/best-practices-for-testing-and-security-in-devops-including-automated-security/) allows you to deploy software to testing and production environments with a single push. Automation reduces the risk associated with manual processes in the production environment.
+
+### There Are Six Types of Deployment
+
+1. In-Place Deployment
+2. Blue/Green Deployment
+3. Canary Deployment
+4. Ramped Deployment
+5. Shadow Deployment
+6. A/B Testing Deployment
+
+### What is a Deployment Strategy in Application Deployment?
+
+A deployment strategy is a technique employed by DevOps teams to launch a new version of a software solution. These strategies cover how [network traffic](https://en.wikipedia.org/wiki/Network_traffic#:~:text=From%20Wikipedia%2C%20the%20free%20encyclopedia%20Network%20traffic%20or,packets%2C%20which%20provide%20the%20load%20in%20the%20network.) in a production environment is transitioned from the old version to the new version. Based on the firm's specialty, a deployment strategy can influence downtime and operational costs.
+
+When it comes to deploying new resources and code versions into your production environment, automation with minimal service interruption is ideal. A deployment strategy is important because it reduces manual configuration and tremendously improves serviceability, as well as reducing the amount of downtime during a deployment.
+
+
+
+#### **1. In-Place Deployments**
+
+An in-place deployment updates the application version without replacing infrastructure components. The previous version of the [application on each compute](/blog/develop-digital-first-culture-edge-computing-applications/) resource is stopped, the latest application is installed, and the new version is started and validated. This method minimizes infrastructure costs and management overhead but can affect application availability during deployment.
+
+<img src={require('./img/in-place-deployment.png').default} alt="In-Place Deployment" width="400" height="250"/>
+<br/>
+
+
+ 
+
+The deployment process involves updating the infrastructure with new code and restarting the application.
+
+<img src={require('./img/in-place-deployment-strategy.png').default} alt="In-Place Deployment Strategy" width="400" height="250"/>
+<br/>
+
+
+ 
+
+Once the new version is deployed on every resource, the deployment is complete.
+
+<img src={require('./img/application-deployment.png').default} alt="Application Deployment" width="400" height="250"/>
+<br/>
+
+
+ 
+
+In-place deployments are cheaper but can cause application downtime. Mitigation strategies include staggering deployments and ensuring sufficient resources to handle demand.
+
+#### **2. Blue/Green Deployment**
+
+The blue/green deployment strategy involves creating two independent infrastructure environments. The blue environment contains the previous version, while the green environment holds the new version. Traffic is shifted to the green environment, and the DNS record is updated to point to Green's load balancer.
+
+<img src={require('./img/blue-green-deployment-768x512.png').default} alt="Blue/Green Deployment" width="600" height="450"/>
+<br/>
+
+
+ 
+
+This strategy allows for quick rollbacks in case of failure but incurs additional costs due to running two environments simultaneously.
+
+#### **3. Canary Deployment**
+
+In canary deployment, the new version is gradually introduced while retaining the old version. For example, 10% of traffic might go to the new version while 90% remains with the old version. This approach helps test the stability of the new version with live traffic.
+
+<img src={require('./img/canary-deployment-768x845.png').default} alt="Canary Deployment" width="400" height="350"/>
+<br/>
+
+
+ 
+
+Canary deployment allows for better performance monitoring and faster rollback but can be slow and time-consuming.
+
+#### **4. Ramped Deployment**
+
+The ramped deployment strategy gradually replaces instances of the old version with the new version one at a time. This method ensures zero downtime and enables performance monitoring.
+
+<img src={require('./img/Ramped-Deployment-768x647.png').default} alt="Ramped Deployment" width="400" height="250"/>
+<br/>
+
+
+ 
+
+The rollback process is lengthy, as it involves reverting instances one by one.
+
+#### **5. Shadow Deployment**
+
+In shadow deployment, the new version is deployed alongside the old version, but users cannot access it immediately. Requests sent to the old version are copied to the shadow version to test its handling.
+
+<img src={require('./img/Shadow-Deployment-768x350.png').default} alt="Shadow Deployment" width="400" height="250"/>
+<br/>
+
+
+ 
+
+This strategy allows for performance monitoring and stability testing but is complex and expensive to set up.
+
+#### **6. A/B Testing Deployment**
+
+A/B testing deployment involves deploying the new version alongside the old version, but only a subset of users can access the new version. This approach measures the effectiveness of the new functionality based on user performance.
+
+<img src={require('./img/AB-testing-deployment-768x555.png').default} alt="A/B Testing Deployment" width="400" height="250"/>
+<br/>
+
+
+ 
+
+Statistics from A/B testing help developers make informed decisions, but setting up A/B testing requires a sophisticated load balancer and is complex.

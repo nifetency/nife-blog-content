@@ -1,0 +1,106 @@
+---
+title: 'From ORA to PG: A Casual Guide to Converting Stored Procedures'
+description: "Changing to PostgreSQL (PG) from Oracle (ORA)? One of those things that can be annoying, but rewarding when done correctly, is converting stored processes. It's similar to untangling your earbuds. Don't worry if you're new to translating from PL/SQL to PL/pgSQL; I've got you covered. We'll discuss how to do it, what to look out for, and how to maintain your sanity."
+date: "2024-12-03"
+tags: [PostgreSQL,Oracle,Database Migration,Stored Procedures,PL/SQL,PL/pgSQL]
+author: Nida Sahar
+keywords: [Oracle to PostgreSQL migration,Converting stored procedures,PL/SQL to PL/pgSQL,Database migration guide,PostgreSQL syntax differences,Oracle compatibility,SQL debugging tools,PostgreSQL exception handling,Database performance optimization]
+---
+
+
+<img src={require('./img/octopg.png').default} alt="From ORA to PG" width="750" height="450"/>
+<br/>
+
+Changing to PostgreSQL (PG) from Oracle (ORA)? One of those things that can be annoying, but rewarding when done correctly, is converting stored processes. It's similar to untangling your earbuds. Don't worry if you're new to translating from PL/SQL to PL/pgSQL; I've got you covered. We'll discuss how to do it, what to look out for, and how to maintain your sanity.
+
+
+
+### Why the Conversion?
+Let's address the question of why this even exists before we get started. You might be switching to an open-source stack. Or perhaps you've finally fallen in love with PostgreSQL because of its cost-effectiveness, flexibility, and performance. For whatever reason, the true challenge is to bridge the gap between the PL/pgSQL world of PostgreSQL and the peculiarities of Oracle's PL/SQL.
+
+
+#### The Oracle-to-PostgreSQL "Language Barrier"
+
+Consider PostgreSQL and Oracle as two cousins who were raised in different countries. Despite speaking different dialects, they share a lot of similarities. However, you'll encounter the following significant differences:
+
+#### 1. Syntax Tweaks
+
+- **Oracle's `%TYPE`?** Nope, PostgreSQL doesn't do that. You'll need to replace it with `DECLARE variable_name variable_type;`.  
+- **PL/SQL's `BEGIN…END`?** Slightly different in PostgreSQL, where you'll use `DO $$ ... $$` for anonymous code blocks.
+
+#### 2. Cursors and Loops
+
+- **SYS_REFCURSOR:** If you love `SYS_REFCURSOR` in Oracle, prepare for a little re-learning. PostgreSQL has cursors too, but they work differently. Loops? Still there, just with a different flavor.
+
+
+#### 3. Exception Handling
+
+- **Exception Blocks:** Oracle uses `EXCEPTION` blocks, while PostgreSQL uses `EXCEPTION WHEN`. Same idea, different syntax.
+
+#### 4. Data Types
+
+- **Data Types:** Oracle's `NUMBER`, `VARCHAR2`, and `CLOB` all need PostgreSQL translations like `NUMERIC`, `TEXT`, etc. PostgreSQL is more particular, so be ready for type mismatches.
+
+
+
+### The Conversion Playbook
+
+Here's the game plan for converting an Oracle stored procedure to PostgreSQL:
+
+#### 1.Break It Down:
+ Start by breaking the procedure into smaller pieces. Look for cursors, loops, and exception blocks—they usually need the most attention.
+
+
+#### 2. Map the Data Types:
+ Check every variable and parameter for type differences. Got an OUT parameter in Oracle? PostgreSQL's got OUT too—it's just slightly different in usage.
+
+
+#### 3. Rewrite the Syntax:
+ Replace Oracle-specific features with their PostgreSQL equivalents. For example, swap %TYPE for explicit type declarations, or convert IF … THEN structures to PostgreSQL's flavor.
+
+
+#### 4.Debug Like a Pro:
+ PostgreSQL isn't shy about throwing errors. Use RAISE NOTICE to log variable values and track execution flow during debugging.
+
+
+
+### Tools to Save Your Day
+Everything doesn't have to be done by hand! A large portion of the conversion can be automated with programs like Ora2Pg. They will get you started, but they won't do everything, particularly for complicated processes.
+
+You might also consider other tools, like:  
+- [pgLoader](https://pgloader.readthedocs.io/) for fast and flexible data migrations.  
+- [SQL Developer Migration Workbench](https://www.oracle.com/database/technologies/appdev/sql-developer.html) for Oracle-specific migrations.
+
+### Debugging: Your New Best Friend
+Debugging is your lifeline when things go wrong, which they will. The RAISE NOTICE feature in PostgreSQL is ideal for monitoring internal operations. Record everything, including dynamic SQL statements, loop counts, and variables.
+
+To help you get started, here is an example snippet:
+
+
+```
+DO $$ 
+DECLARE
+    counter INTEGER := 0;
+BEGIN
+    FOR counter IN 1..10 LOOP
+        RAISE NOTICE 'Counter value: %', counter;
+    END LOOP;
+END $$;
+```
+
+
+### Testing for Functional Equivalence
+Are you curious as to whether your PostgreSQL method is acting similarly to the Oracle one? Create a couple of test cases. Construct input scenarios and contrast Oracle with PostgreSQL's outcomes. Comparing two maps to make sure you're not lost is analogous to that.
+
+
+### Performance Pitfalls
+Test the performance after conversion. Although PostgreSQL has a strong query planner, indexing or query modifications may be necessary to match Oracle's speed. Remember to evaluate and adjust your PG queries. check out the [PostgreSQL Performance Tips Guide](https://www.postgresql.org/docs/current/performance-tips.html).
+
+### Wrapping It Up
+It takes more than just copying and pasting to convert Oracle stored procedures to PostgreSQL. It's about recognizing the distinctions, accepting PostgreSQL's peculiarities, and ensuring that the code functions flawlessly. It's a learning curve, certainly, but it's also a chance to develop your abilities and appreciate PostgreSQL's vast ecosystem.
+Are you stuck somewhere? I enjoy debugging a good stored procedure mess, so let me know!
+
+
+- Checkout [PostgreSQL Official Documentation](https://www.postgresql.org/docs/)  
+
+

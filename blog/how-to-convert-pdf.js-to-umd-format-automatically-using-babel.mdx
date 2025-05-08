@@ -1,0 +1,143 @@
+---
+title: "How to Convert PDF.js to UMD Format Automatically Using Babel"
+description: "Learn how to convert PDF.js ES6 modules to UMD format using a simple shell script with Babel—perfect for legacy browser support."
+date: "2025-04-10"
+tags: [PDF.js, Babel, JavaScript, UMD, ES6, Transpilation, Web Development]
+author: Nida Sahar
+keywords: [PDF.js UMD, Convert MJS to UMD, Babel Transpilation, JavaScript Modules, Automate PDF.js, PDF.js Compatibility, UMD Script]
+---
+
+
+
+If you've used **PDF.js** in JavaScript projects, you might have noticed the `pdfjs-dist` package provides files in **ES6 module format** (`.mjs`). But what if your project needs **UMD-compatible** `.js` files instead?  
+In this guide, I'll show you how to **automatically transpile** PDF.js from `.mjs` to UMD using **Babel**—no manual conversion required.  
+
+---
+
+## Why UMD Instead of ES6 Modules?  
+
+<img src={require('./img/2010.i518.002_chatbot.jpg').default} alt="Explanation of when to choose UMD over ES6 Modules in JavaScript" width="500" height="400"/>
+<br/>
+
+Before we dive in, let’s clarify the difference:  
+
+ **ES6 Modules (`.mjs`)**  
+- Modern JavaScript standard  
+- Works natively in newer browsers and Node.js  
+- Uses `import/export` syntax  
+
+**UMD (`.js`)**  
+- Works in **older browsers, Node.js, and AMD loaders**  
+- Better for legacy projects or bundlers that don’t support ES6  
+
+If your environment **doesn’t support ES6 modules**, UMD is the way to go.  
+
+[See how module formats differ →](https://webpack.js.org/concepts/output/#librarytarget)  
+
+---
+
+## The Solution: Automate Transpilation with Babel  
+
+<img src={require('./img/20944999.jpg').default} alt="How Babel automates JavaScript transpilation between versions" width="500" height="400"/>
+<br/>
+
+Instead of searching for pre-built UMD files (which may not exist), we’ll use **Babel** to convert them automatically.  
+
+### Step 1: Install Babel & Required Plugins  
+
+First, install these globally (or locally in your project):  
+
+```bash
+npm install --global @babel/cli @babel/preset-env @babel/plugin-transform-modules-umd
+```
+
+- `@babel/cli` → Runs Babel from the command line  
+- `@babel/preset-env` → Converts modern JS to compatible code  
+- `@babel/plugin-transform-modules-umd` → Converts modules to UMD format  
+
+---
+
+For more on Babel configurations, check out the [official Babel docs](https://babeljs.io/docs/en/configuration).  
+
+
+### Step 2: Create the Transpilation Script  
+
+Save this as **`transpile_pdfjs.sh`**:  
+
+```bash
+#!/bin/bash
+
+# Check if Babel is installed
+if ! command -v npx &> /dev/null; then
+  echo " Error: Babel (via npx) is required. Install Node.js first."
+  exit 1
+fi
+
+# Define source (.mjs) and destination (UMD .js) folders
+SRC_DIR="pdfjs-dist/build"
+DEST_DIR="pdfjs-dist/umd"
+
+# Create the output folder if missing
+mkdir -p "$DEST_DIR"
+
+# Run Babel to convert .mjs → UMD .js
+npx babel "$SRC_DIR" \
+  --out-dir "$DEST_DIR" \
+  --extensions ".mjs" \
+  --ignore "**/*.min.mjs" \
+  --presets @babel/preset-env \
+  --plugins @babel/plugin-transform-modules-umd
+
+# Check if successful
+if [ $? -eq 0 ]; then
+  echo " Success! UMD files saved in: $DEST_DIR"
+else
+  echo " Transpilation failed. Check for errors above."
+fi
+```
+
+---
+Merge multiple PDFs into a single file effortlessly with our [Free PDF Merger](https://freetools.nife.io/pdf-merger/ ) and
+Split large PDFs into smaller, manageable documents using our [Free PDF Splitter](https://freetools.nife.io/pdf-spliter/).
+
+### Step 3: Run the Script  
+
+1. Make it executable:  
+   ```bash
+   chmod +x transpile_pdfjs.sh
+   ```
+
+2. Execute it:  
+   ```bash
+   ./transpile_pdfjs.sh
+   ```
+
+---
+
+## What’s Happening?  
+
+<img src={require('./img/7686388.jpg').default} alt="Automating JavaScript code conversion using Babel for cross-browser support" width="500" height="400"/>
+<br/>
+
+✔ **Checks for Babel** → Ensures the tool is installed.  
+✔ **Creates a `umd` folder** → Stores the converted `.js` files.  
+✔ **Transpiles `.mjs` → UMD** → Uses Babel to convert module formats.  
+✔ **Skips minified files** → Avoids re-processing `.min.mjs`.  
+
+Want to automate your JS build process further?  Check out this [BrowserStack](https://www.browserstack.com/guide/build-automation).  
+
+---
+
+## Final Thoughts  
+
+
+Now you can **use PDF.js in any environment**, even if it doesn’t support ES6 modules!  
+
+🔹 **No manual conversion** → Fully automated.  
+🔹 **Works with the latest `pdfjs-dist`** → Always up-to-date.  
+🔹 **Reusable script** → Run it anytime you update PDF.js.  
+
+
+And if you want to bundle your PDF.js output, [Rollup’s](https://rollupjs.org/guide/en/#outputformat) guide to output formats is a great next read.  
+Next time you need UMD-compatible PDF.js, just **run this script** and you’re done!                                                              
+Simplify the deployment of your Node.js applications Check out this [nife.io](https://nife.io/solutions/Deploy%20Node%20App).  

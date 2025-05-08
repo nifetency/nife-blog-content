@@ -1,0 +1,123 @@
+---
+title: 'My EC2 Instance Refuses SSH Connections - A Casual yet Technical Guide'
+description: "When it comes to administering cloud servers, there's nothing quite like trying to SSH into your EC2 instance and receiving the dreaded Connection rejected message. Prepare to panic! But take a deep breath—we've all been there, and the solution is frequently simpler than it appears. Let's troubleshoot this problem together, keeping it light but technical."
+date: "2024-12-06"
+tags: [AWS,EC2,Cloud Computing,SSH Troubleshooting,AWS Security,DevOps]
+author: Nida Sahar
+keywords: [SSH connection issues EC2,AWS EC2 troubleshooting,Security groupconfiguration,Elastic IP setup,EC2 instance not responding,Firewall rules for SSH,AWS EC2 SSH daemon,Fix SSH access issues AWS]
+---
+
+When it comes to administering cloud servers, there's nothing quite like trying to [SSH into your EC2 instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-linux-inst-ssh.html) and receiving the dreaded Connection rejected message. Prepare to panic! But take a deep breath—we've all been there, and the solution is frequently simpler than it appears. Let's troubleshoot this problem together, keeping it light but technical.
+
+<img src={require('./img/aws-ec2.png').default} alt="ec2" width="900" height="450"/>
+<br/>
+
+### Why is My EC2 Ignoring Me?
+
+Before we get into the answer, let's quickly explore why your instance may be giving you the silent treatment:
+
+- It's Alive... Right?
+  + Perhaps the instance is turned off or failing its status checks. There is no machine and therefore no connection.
+
+
+- Locked Door: Security Group Issues
+  + Your security group ((EC2's way of saying firewall rules))[https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html] might not be letting you in.
+
+
+- The Wrong Address
+   + If you do not have an [Elastic IP](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) attached, your public IP address may vary. Are you knocking on the wrong door?
+
+
+- Software Drama
+  + SSH service might not be running, or the instance's firewall (hello, iptables) could be blocking port 22.
+
+
+- Hardware Drama
+  + Rare, but hardware issues or improper disk configurations can lead to this. Did you edit `/etc/fstab` recently?
+
+
+### Let's Fix It! (Step-by-Step)
+
+#### Step 1: Breathe.
+
+You're not locked out indefinitely. AWS gives us plenty of tools to recover access.
+
+#### Step 2: Check if the Instance is Running
+
+Log into the [AWS Management Console](https://aws.amazon.com/console/) and head to the EC2 Dashboard:
++ Is your instance in the Running state?
++ Are the status checks green? If they're red, AWS may already be indicating a hardware or configuration issue.
+
+#### Step 3: Review Security Group Rules
+Imagine going up to a party with the wrong invitation. Security groups are your EC2's bouncers, deciding who gets in.
+
+- Go to Security Groups in the AWS Console.
+
+Make sure there's an inbound rule allowing SSH (port 22) from your IP:
+
+Type: SSH  
+Protocol: TCP  
+Port Range: 22  
+Source: Your IP (or 0.0.0.0/0 for testing—just don't leave it open forever!)
+
+
+#### Step 4: Confirm the Public IP or DNS
+
+Every instance has an address, but it may vary unless you've configured an 
+Elastic IP. Make sure you're using the right public IP/DNS name.
+
+Run the SSH command:
+```
+ssh -i "your-key.pem" ubuntu@<PUBLIC_IP>
+```
+
+#### Step 5: Test Your Key and Permissions
+Your private key file (.pem) is like a VIP pass. Without proper permissions, it won't work. Ensure it's secure:
+```
+chmod 400 your-key.pem
+```
+Retry SSH.
+
+#### Step 6: The Firewall's Watching Too
+Once inside the instance, check if the OS's internal firewall is behaving:
+```
+sudo iptables -L -n
+```
+If you see rules blocking port 22, adjust them:
+```
+sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+```
+
+#### Step 7: Is SSH Even Running?
+If your EC2 is a house, the SSH daemon (sshd) is the butler answering the door. Make sure it's awake:
+```
+sudo systemctl status sshd
+```
+
+If it's not running:
+```
+sudo systemctl start sshd
+```
+
+### But What if It's REALLY Bad?
+Sometimes the problem is deeper. Maybe you misconfigured /etc/fstab or the instance itself is inaccessible. Don't sweat it—AWS has your back:
+Use EC2 Instance Connect: A browser-based SSH client for emergencies.
+Attach the Volume to Another Instance: Detach the root volume, fix the configuration, and reattach it.
+
+### The Takeaway
+AWS EC2 instances are powerful, but they are not immune to minor issues. Whether it's a misconfigured firewall or a stopped SSH service, remedies are always available. And, hey, the next time Connection rejected appears, you'll know just how to convince your instance to open the door again.
+Enjoy cloud computing! 
+
+## Related Reads  
+
+Want to dive deeper into AWS and cloud automation? Check out these blogs:  
+
+[Automating Deployment and Scaling in Cloud Environments like AWS and GCP](https://docs.nife.io/blog/automating-deployment-and-scaling-in-cloud-environments-like-aws-and-gcp)  
+Learn how to streamline your deployment processes and scale efficiently across cloud platforms like AWS and GCP.  
+
+[Unleash the Power of AWS DevOps Tools to Supercharge Software Delivery](https://docs.nife.io/blog/unleash-power-of-aws-devops-tools-supercharge-software-delivery)  
+Explore the tools AWS offers to enhance your software delivery pipeline, improving efficiency and reliability.  
+
+[Step-by-Step Guide to Multi-Cloud Automation with SkyPilot on AWS](https://docs.nife.io/blog/Skypilot/) Step-by-Step Guide to Multi-Cloud Automation with SkyPilot on AWs  
+
+
