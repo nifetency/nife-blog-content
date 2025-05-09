@@ -14,7 +14,7 @@ Encountering endless redirects between HTTP and HTTPS on your Nginx website? Thi
 
 ## Understanding Infinite Redirect Loops
 
-<img src={require('./img/4574122.jpg').default} alt="A screenshot of a web browser displaying the Too Many Redirects error message." width="600" height="450"/>
+![A screenshot of a web browser displaying the Too Many Redirects error message.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/4574122.jpg)
 <br/>
 
 The goal of HTTP to HTTPS redirection is simple: automatically route `http://yourdomain.com` requests to `https://yourdomain.com`.  However, misconfiguration can create a cycle where Nginx repeatedly redirects between HTTP and HTTPS, preventing users from accessing the page and resulting in the dreaded "Too Many Redirects" browser error. [sitechecker](https://sitechecker.pro/site-audit-issues/redirect-loop/) 
@@ -23,14 +23,14 @@ The goal of HTTP to HTTPS redirection is simple: automatically route `http://you
 
 
 
-<img src={require('./img/3053856.jpg').default} alt="A diagram showing an HTTP request being redirected to HTTPS, then incorrectly back to HTTP, creating an infinite loop." width="600" height="450"/>
+![A diagram showing an HTTP request being redirected to HTTPS, then incorrectly back to HTTP, creating an infinite loop.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/3053856.jpg)
 <br/>
 
 This guide provides a solution to configure Nginx correctly, eliminating frustrating redirect loops. [checkout infinite redirect for next js](https://github.com/clerk/javascript/issues/1436) 
 
 ### 1. Redirect HTTP to HTTPS
 
-<img src={require('./img/5326066.jpg').default} alt="A code snippet showing the correct Nginx configuration for redirecting HTTP to HTTPS, highlighting the `return 301` line." width="600" height="450"/>
+![A code snippet showing the correct Nginx configuration for redirecting HTTP to HTTPS, highlighting the `return 301` line.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/5326066.jpg)
 <br/>
 
 

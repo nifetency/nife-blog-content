@@ -8,7 +8,7 @@ keywords: ['NGINX Docker', 'Dockerized NGINX', 'NGINX configuration', 'Troublesh
 ---
 
 
-<img src={require('./img/docker+nginx.png').default} alt="nginx and docker" width="650" height="350"/>
+![nginx and docker](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/docker+nginx.png)
 <br/>
 
 Before we dive into troubleshooting, let's talk about why you'd even want to run NGINX in a Docker container. The main reasons are [portability](https://www.docker.com/resources/what-container), scalability, and isolation.
@@ -35,7 +35,7 @@ Docker uses a virtual network to connect containers, and when NGINX is trying to
 #### How to fix it:
 
 
-<img src={require('./img/Wavy_Tech-08_Single-04.jpg').default} alt="Illustration of a person working on a computer to fix" width="650" height="450"/>
+![Illustration of a person working on a computer to fix](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/Wavy_Tech-08_Single-04.jpg)
 <br/>
 
 - [Verify the network configuration](https://docs.docker.com/network/): Verify that the upstream service and NGINX are on the same Docker network.
@@ -58,7 +58,7 @@ When things go awry, misconfigured NGINX settings are frequently to blame. Erron
 #### What causes this to occur?
 
 
-<img src={require('./img/6199776.jpg').default} alt="Illustration of a person working on a computer to fix error" width="650" height="450"/>
+![Illustration of a person working on a computer to fix error](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6199776.jpg)
 <br/>
 
 Typically, environment variables, mounted files, or Docker volumes are used to configure Docker containers. NGINX might not start or act strangely if you're not diligent about mapping these correctly or passing the appropriate variables.

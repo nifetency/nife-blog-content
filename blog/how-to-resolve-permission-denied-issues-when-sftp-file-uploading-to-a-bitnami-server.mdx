@@ -8,7 +8,7 @@ author: Nida Sahar
 ---
 
 
-<img src={require('./img/7081413.jpg').default} alt="Access Denied warning with a locked padlock, error symbols, and malware icons—representing SFTP permission issues on a Bitnami server." width="500" height="400"/>
+![Access Denied warning with a locked padlock, error symbols, and malware icons—representing SFTP permission issues on a Bitnami server.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/7081413.jpg)
 <br/>
 
 You're not alone if you've ever attempted to upload a file to your Bitnami server using SFTP and run into the dreaded `Permission denied` error. When the person you're connecting as lacks the required write rights for the target directory, this problem frequently occurs. To help you troubleshoot and resolve this issue so you may resume your job, here is a simple instruction.
@@ -25,7 +25,7 @@ This occurs because your SFTP account lacks write permissions to the directory y
 
 ## First step: Verify Permissions
 
-<img src={require('./img/6322675.jpg').default} alt="Illustration of a person entering an OTP code for two-factor authentication, representing secure login verification with a shield icon for data protection." width="500" height="400"/>
+![Illustration of a person entering an OTP code for two-factor authentication, representing secure login verification with a shield icon for data protection.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6322675.jpg)
 <br/>
 
 
@@ -75,7 +75,7 @@ sudo chmod 755 /path/to/your/directory
 
 ## Step 3: Use `scp` with `sudo`
 
-<img src={require('./img/5063183.jpg').default} alt="Illustration of a person sitting with a laptop in front of a large screen showing a software update in progress, with cloud upload and refresh icons representing system updates and synchronization." width="500" height="400"/>
+![Illustration of a person sitting with a laptop in front of a large screen showing a software update in progress, with cloud upload and refresh icons representing system updates and synchronization.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/5063183.jpg)
 <br/>
 
 Another choice if you don't want to change the directory permissions is to upload the file to a temporary directory, such as `/tmp`, using `scp` (secure copy), and then use `sudo` to move it to the target directory.
