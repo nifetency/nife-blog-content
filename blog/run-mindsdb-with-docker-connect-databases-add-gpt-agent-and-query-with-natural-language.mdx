@@ -1,0 +1,197 @@
+---
+title: "Run MindsDB with Docker, Connect Databases, Add GPT Agent, and Query with Natural Language"
+date: "2025-07-04"
+author: Rahul Surya S H
+description: "Step-by-step guide to run MindsDB using Docker, connect a MySQL database, integrate OpenAI’s GPT-4o model, and query data in natural language."
+tags: [MindsDB, Docker, GPT, OpenAI, MySQL, AI Agents]
+keywords: [MindsDB Docker tutorial, Connect MySQL to MindsDB, GPT AI agent MindsDB, MindsDB natural language SQL, GPT-4o database query, OpenAI MindsDB integration, AI data agents, LLMs in SQL workflows]
+---
+
+
+
+This guide walks you through running MindsDB using Docker, connecting your own database, adding a GPT-based AI agent, and querying it—all in detail.
+
+
+
+## 1. Running MindsDB Using Docker
+
+<img src={require('./img/7856001.jpg').default} alt="Developers running MindsDB using Docker container" width="650" height="500"/>
+<br/>
+
+follow this step-by-step [deployment guide](https://docs.nife.io/docs/Guides/how-to-deploy-minddb-from-openhub/) to get started on Nife’s hybrid cloud—no Docker or manual setup needed
+
+**Prerequisites:**
+
+- Docker installed on your machine.
+- If you're new to Docker, see [Install Docker](https://docs.docker.com/get-docker/) for platform-specific instructions.
+
+**Start MindsDB:**
+
+```bash
+docker run -d \
+  --name mindsdb \
+  -p 47334:47334 \
+  -p 47335:47335 \
+  mindsdb/mindsdb:latest
+```
+
+* **47334**: HTTP API & Web GUI
+* **47335**: MySQL API
+
+Once started, access the MindsDB GUI at:
+`http://localhost:47334`
+Or use the API at the same port.
+
+if you're curious about how MindsDB works behind the scenes, check out this [introduction to MindsDB architecture](https://docs.mindsdb.com/introduction/how-it-works).
+
+
+
+
+
+## 2. Adding a Database Connection
+
+MindsDB can connect to many databases (MySQL, PostgreSQL, etc.). Here’s how to add a MySQL database:
+
+**SQL Command (run in MindsDB SQL editor or via API):**
+
+```sql
+CREATE DATABASE mysql_conn
+WITH ENGINE = 'mysql',
+PARAMETERS = {
+  "host": "your-mysql-host",
+  "port": 3306,
+  "database": "your_db_name",
+  "user": "your_db_user",
+  "password": "your_db_password"
+};
+
+```
+
+* Replace the values with your actual database details.
+* You can also use a connection URL:
+
+```sql
+CREATE DATABASE mysql_conn
+WITH ENGINE = 'mysql',
+PARAMETERS = {
+  "url": "mysql://user:password@host:3306/db_name"
+};
+```
+
+**Check the connection:**
+
+```sql
+SHOW DATABASES;
+```
+
+or
+
+```sql
+SELECT * FROM mysql_conn.your_table LIMIT 5;
+```
+
+If you need a sample MySQL database for testing, you can find open datasets at [MySQL Sample Databases](https://dev.mysql.com/doc/index-other.html).
+
+
+
+## 3. Adding a GPT AI Agent
+
+To use GPT (like GPT-4o) for natural language Q\&A, you need an OpenAI API key.
+
+**Step 1: Create the Agent**
+
+```sql
+CREATE AGENT my_gpt_agent
+USING
+  model = 'gpt-4o',
+  openai_api_key = 'your_openai_api_key',
+  include_tables = ['mysql_conn.your_table'],
+  prompt_template = '
+    mysql_conn.your_table contains your business data.
+    Answer questions using this data.
+  ';
+```
+
+* `model`: The LLM to use (e.g., 'gpt-4o').
+* `openai_api_key`: Your OpenAI API key.
+* `include_tables`: List the tables the agent can access.
+* `prompt_template`: (Optional) Describe your data to help the agent answer accurately.
+
+Not sure which model to use? Here's a [comparison of GPT-4o vs Gemini vs Claude](https://www.evolution.ai/post/claude-vs-gpt-4o-vs-gemini).
+
+**Step 2: Verify the Agent**
+
+```sql
+SHOW AGENTS WHERE name = 'my_gpt_agent';
+```
+
+
+
+## 4. Asking Questions to the Agent
+
+<img src={require('./img/5326273.jpg').default} alt="Developer interacting with GPT agent using natural language queries about MindsDB " width="550" height="500"/>
+<br/>
+
+You can now ask natural language questions to your agent:
+
+```sql
+SELECT answer
+FROM my_gpt_agent
+WHERE question = 'How many customers signed up last month?';
+```
+
+* The agent will use the connected data and GPT model to answer your question in natural language.
+
+If you're new to prompt design, this [OpenAI cookbook](https://github.com/openai/openai-cookbook) has great examples for GPT-based workflows.
+
+
+
+## 5. Full Example Workflow
+
+1. **Start MindsDB with Docker** (see above).
+2. **Connect your database** (e.g., MySQL).
+3. **Create a GPT agent** linked to your data.
+4. **Ask questions** using SQL.
+
+
+
+## 6. Tips and Troubleshooting
+
+<img src={require('./img/3325622.jpg').default} alt="Developer troubleshooting MindsDB errors with help from a teammate" width="550" height="500"/>
+<br/>
+
+* **Multiple Databases:** Repeat the `CREATE DATABASE` step for each data source.
+* **Other Models:** You can use other LLMs (Gemini, Anthropic, etc.) by changing the `model` and API key.
+* **Data Security:** Never expose your API keys in public code or logs.
+* **Error Handling:** If you get connection errors, double-check your database credentials and network access.
+
+
+
+## 7. Reference Table
+
+| Step             | Command/Action                                                          |
+| ---------------- | ----------------------------------------------------------------------- |
+| Run MindsDB      | `docker run -d -p 47334:47334 -p 47335:47335 mindsdb/mindsdb:latest`    |
+| Add Database     | `CREATE DATABASE mysql_conn WITH ENGINE = 'mysql', PARAMETERS = {...};` |
+| Create GPT Agent | `CREATE AGENT my_gpt_agent USING model = 'gpt-4o', ...;`                |
+| Ask a Question   | `SELECT answer FROM my_gpt_agent WHERE question = '...';`               |
+
+
+
+## Final Thoughts
+
+MindsDB bridges the gap between traditional SQL databases and modern AI models, allowing you to ask complex questions over your structured data using natural language.
+
+With Docker for setup, SQL for control, and GPT-4o for intelligence, this workflow empowers developers, analysts, and product teams alike.
+
+Whether you’re building an analytics dashboard, data chatbot, or intelligent reporting tool—**you now have a full pipeline from data to insight** using MindsDB + GPT.
+
+
+You can deploy MindsDB in just a few minutes  using [Nife.io](https://nife.io/), a unified platform for AI applications, cloud deployment, and DevOps automation.
+
+Explore and launch MindsDB instantly from the [OpenHub App Marketplace](https://openhub.nife.io/apps/) .
+
+---
+
+
+

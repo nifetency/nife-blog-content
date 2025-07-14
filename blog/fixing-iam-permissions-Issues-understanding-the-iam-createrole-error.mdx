@@ -7,7 +7,7 @@ author: "Nida Sahar"
 keywords: [AWS , IMA, IAM Permissions, AWS Security, IAM Policy, AWS Role Management, AWS Access Control]
 ---
 
-![Illustration of cloud security featuring a cloud icon with a padlock and chain, a shield, and network connections, representing secure cloud computing.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/ONKVWM0.jpg)
+<img src={require('./img/ONKVWM0.jpg').default} alt="Illustration of cloud security featuring a cloud icon with a padlock and chain, a shield, and network connections, representing secure cloud computing." width="500" height="350"/>
 <br/>
 
 Have you ever been trying to do anything on AWS and been baffled by an error message that leaves you baffled? Often, the dreaded "not authorised to perform" error is the culprit. Usually, this occurs when a position or user lacks the authorisation needed to carry out a certain task. Have you ever witnessed anything similar to:
@@ -38,7 +38,7 @@ Creating a new role could be necessary when configuring an AWS service (such as 
 
 ### Setting Up Automation or CI/CD Pipelines
 
-![DevOps engineer working on CI/CD automation with an infinity loop symbol.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/cicd.jpg)
+<img src={require('./img/cicd.jpg').default} alt="DevOps engineer working on CI/CD automation with an infinity loop symbol." width="900" height="550"/>
 <br/>
 
 IAM roles may need to be created dynamically if you're automating infrastructure provisioning with a CI/CD pipeline (like [Terraform](https://developer.hashicorp.com/terraform/docs) or [AWS CodePipeline](https://aws.amazon.com/codepipeline/)). This error may occur if the pipeline's IAM role lacks the `iam:CreateRole` authorisation.
@@ -54,7 +54,7 @@ If the user is unable to establish roles in IAM, a permission error may occur wh
 ### Permissions Related to Infrastructure as Code (IaC) Tools
 
 
-![Cybersecurity concept with businessmen, cloud storage, and a locked laptop](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/57830.jpg)
+<img src={require('./img/57830.jpg').default} alt="Cybersecurity concept with businessmen, cloud storage, and a locked laptop" width="900" height="550"/>
 <br/>
 
 IAM role generation is managed by a number of infrastructure tools, such as [Terraform](https://developer.hashicorp.com/terraform/docs), [CloudFormation](https://docs.aws.amazon.com/cloudformation/index.html), or [AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/home.html). This error will appear if you use any of these tools to generate resources that need new IAM roles and the user isn't authorised to create roles.

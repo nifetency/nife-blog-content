@@ -17,7 +17,7 @@ In this post, we’ll walk through several methods to remove lines using line nu
 
 ## The Basic Idea
 
-![ ](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6437614.jpg)
+<img src={require('./img/6437614.jpg').default} alt="Visual breakdown of how to delete lines by line number in a file" width="500" height="450"/>
 <br/>
 
 To delete a specific range of lines from a file:
@@ -32,7 +32,7 @@ Let’s break this down by method.
 
 ## 1. Using `sed` (Stream Editor)
 
-![](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/3301602.jpg)
+<img src={require('./img/3301602.jpg').default} alt="sed command example to remove specific lines from a file" width="500" height="450"/>
 <br/>
 
 `sed` is a command-line utility that’s perfect for modifying files line-by-line.
@@ -58,7 +58,7 @@ END_LINE=20
 sed "${START_LINE},${END_LINE}d" myfile.txt > temp_file && mv temp_file myfile.txt
 ```
 
-📚 [More on sed line deletion](https://www.gnu.org/software/sed/manual/sed.html#Deleting-Lines)
+📚 [More on sed line deletion](https://phoenixnap.com/kb/sed-delete-line)
 
 ---
 
@@ -81,7 +81,7 @@ awk 'NR < 10 || NR > 20' myfile.txt > temp_file && mv temp_file myfile.txt
 
 This prints all lines **except** lines 10 through 20.
 
-📚 [Learn more about awk](https://www.gnu.org/software/gawk/manual/gawk.html)
+📚 [Learn more about awk](https://stackoverflow.com/questions/13579929/how-to-delete-lines-from-file-with-sed-awk)
 
 ---
 
@@ -149,7 +149,7 @@ Python is especially useful if you need to add logic or conditions around what g
 
 ## Conclusion
 
-![](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20943639.jpg)
+<img src={require('./img/20943639.jpg').default} alt="Summary illustration of methods to delete lines from files using command-line" width="500" height="450"/>
 <br/>
 
 There are plenty of ways to delete lines from a file based on line numbers:

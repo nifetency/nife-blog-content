@@ -41,7 +41,7 @@ When it comes to deploying new resources and code versions into your production 
 
 An in-place deployment updates the application version without replacing infrastructure components. The previous version of the [application on each compute](/blog/develop-digital-first-culture-edge-computing-applications/) resource is stopped, the latest application is installed, and the new version is started and validated. This method minimizes infrastructure costs and management overhead but can affect application availability during deployment.
 
-![In-Place Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/in-place-deployment.png)
+<img src={require('./img/in-place-deployment.png').default} alt="In-Place Deployment" width="400" height="250"/>
 <br/>
 
 
@@ -49,7 +49,7 @@ An in-place deployment updates the application version without replacing infrast
 
 The deployment process involves updating the infrastructure with new code and restarting the application.
 
-![In-Place Deployment Strategy](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/in-place-deployment-strategy.png)
+<img src={require('./img/in-place-deployment-strategy.png').default} alt="In-Place Deployment Strategy" width="400" height="250"/>
 <br/>
 
 
@@ -57,7 +57,7 @@ The deployment process involves updating the infrastructure with new code and re
 
 Once the new version is deployed on every resource, the deployment is complete.
 
-![Application Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/application-deployment.png)
+<img src={require('./img/application-deployment.png').default} alt="Application Deployment" width="400" height="250"/>
 <br/>
 
 
@@ -69,7 +69,7 @@ In-place deployments are cheaper but can cause application downtime. Mitigation 
 
 The blue/green deployment strategy involves creating two independent infrastructure environments. The blue environment contains the previous version, while the green environment holds the new version. Traffic is shifted to the green environment, and the DNS record is updated to point to Green's load balancer.
 
-![Blue/Green Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/blue-green-deployment-768x512.png)
+<img src={require('./img/blue-green-deployment-768x512.png').default} alt="Blue/Green Deployment" width="600" height="450"/>
 <br/>
 
 
@@ -81,7 +81,7 @@ This strategy allows for quick rollbacks in case of failure but incurs additiona
 
 In canary deployment, the new version is gradually introduced while retaining the old version. For example, 10% of traffic might go to the new version while 90% remains with the old version. This approach helps test the stability of the new version with live traffic.
 
-![Canary Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/canary-deployment-768x845.png)
+<img src={require('./img/canary-deployment-768x845.png').default} alt="Canary Deployment" width="400" height="350"/>
 <br/>
 
 
@@ -93,7 +93,7 @@ Canary deployment allows for better performance monitoring and faster rollback b
 
 The ramped deployment strategy gradually replaces instances of the old version with the new version one at a time. This method ensures zero downtime and enables performance monitoring.
 
-![Ramped Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/Ramped-Deployment-768x647.png)
+<img src={require('./img/Ramped-Deployment-768x647.png').default} alt="Ramped Deployment" width="400" height="250"/>
 <br/>
 
 
@@ -105,7 +105,7 @@ The rollback process is lengthy, as it involves reverting instances one by one.
 
 In shadow deployment, the new version is deployed alongside the old version, but users cannot access it immediately. Requests sent to the old version are copied to the shadow version to test its handling.
 
-![Shadow Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/Shadow-Deployment-768x350.png)
+<img src={require('./img/Shadow-Deployment-768x350.png').default} alt="Shadow Deployment" width="400" height="250"/>
 <br/>
 
 
@@ -117,7 +117,7 @@ This strategy allows for performance monitoring and stability testing but is com
 
 A/B testing deployment involves deploying the new version alongside the old version, but only a subset of users can access the new version. This approach measures the effectiveness of the new functionality based on user performance.
 
-![A/B Testing Deployment](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/AB-testing-deployment-768x555.png)
+<img src={require('./img/AB-testing-deployment-768x555.png').default} alt="A/B Testing Deployment" width="400" height="250"/>
 <br/>
 
 

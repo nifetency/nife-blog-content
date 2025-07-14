@@ -1,10 +1,10 @@
 ---
-title: "How to Convert PDF.js to UMD Format Automatically Using Babel"
-description: "Learn how to convert PDF.js ES6 modules to UMD format using a simple shell script with Babel—perfect for legacy browser support."
+title: "Convert PDF.js to UMD Format Automatically: Use Babel and Shell Script for Legacy Browser Compatibility"
+description: "Automatically convert PDF.js from ES6 modules to UMD format using Babel and shell scripts. Ideal for legacy browsers and bundlers that don't support modern JavaScript."
 date: "2025-04-10"
 tags: [PDF.js, Babel, JavaScript, UMD, ES6, Transpilation, Web Development]
 author: Nida Sahar
-keywords: [PDF.js UMD, Convert MJS to UMD, Babel Transpilation, JavaScript Modules, Automate PDF.js, PDF.js Compatibility, UMD Script]
+keywords: [PDF.js UMD, Convert MJS to UMD, Babel Transpilation, JavaScript Modules, Automate PDF.js, PDF.js Compatibility, UMD Script, ES6 to UMD, PDF.js transpile, Babel plugin-transform-modules-umd, JavaScript legacy support, shell script automation, Node.js PDF rendering]
 ---
 
 
@@ -14,9 +14,9 @@ In this guide, I'll show you how to **automatically transpile** PDF.js from `.mj
 
 ---
 
-## Why UMD Instead of ES6 Modules?  
+##  Why Use UMD Instead of ES6 Modules for PDF.js Integration?
 
-![Explanation of when to choose UMD over ES6 Modules in JavaScript](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/2010.i518.002_chatbot.jpg)
+<img src={require('./img/2010.i518.002_chatbot.jpg').default} alt="Comparison chart of ES6 Modules vs UMD format for PDF.js compatibility in different environments" width="500" height="400"/>
 <br/>
 
 Before we dive in, let’s clarify the difference:  
@@ -36,14 +36,14 @@ If your environment **doesn’t support ES6 modules**, UMD is the way to go.
 
 ---
 
-## The Solution: Automate Transpilation with Babel  
+## How to Use Babel to Transpile PDF.js from ES6 Modules to UMD Format 
 
-![How Babel automates JavaScript transpilation between versions](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20944999.jpg)
+<img src={require('./img/20944999.jpg').default} alt="Diagram showing Babel transforming ES6 module PDF.js into UMD for browser compatibility" width="500" height="400"/>
 <br/>
 
 Instead of searching for pre-built UMD files (which may not exist), we’ll use **Babel** to convert them automatically.  
 
-### Step 1: Install Babel & Required Plugins  
+### Step 1:Install Babel and Required Plugins for UMD Conversion
 
 First, install these globally (or locally in your project):  
 
@@ -60,7 +60,7 @@ npm install --global @babel/cli @babel/preset-env @babel/plugin-transform-module
 For more on Babel configurations, check out the [official Babel docs](https://babeljs.io/docs/en/configuration).  
 
 
-### Step 2: Create the Transpilation Script  
+### Step 2: Create a Shell Script to Transpile PDF.js from .mjs to UMD 
 
 Save this as **`transpile_pdfjs.sh`**:  
 
@@ -100,7 +100,7 @@ fi
 Merge multiple PDFs into a single file effortlessly with our [Free PDF Merger](https://freetools.nife.io/pdf-merger/ ) and
 Split large PDFs into smaller, manageable documents using our [Free PDF Splitter](https://freetools.nife.io/pdf-spliter/).
 
-### Step 3: Run the Script  
+### Step 3:Run Your Babel Transpilation Script for PDF.js
 
 1. Make it executable:  
    ```bash
@@ -114,9 +114,9 @@ Split large PDFs into smaller, manageable documents using our [Free PDF Splitter
 
 ---
 
-## What’s Happening?  
+## What the PDF.js Babel Transpilation Script Actually Does
 
-![Automating JavaScript code conversion using Babel for cross-browser support](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/7686388.jpg)
+<img src={require('./img/7686388.jpg').default} alt="Visualization of JavaScript code automation using Babel for UMD conversion of PDF.js modules" width="500" height="400"/>
 <br/>
 
 ✔ **Checks for Babel** → Ensures the tool is installed.  
@@ -128,7 +128,7 @@ Want to automate your JS build process further?  Check out this [BrowserStack](h
 
 ---
 
-## Final Thoughts  
+##  Final Thoughts: Make PDF.js Compatible with All Browsers Using UMD Format
 
 
 Now you can **use PDF.js in any environment**, even if it doesn’t support ES6 modules!  

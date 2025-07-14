@@ -1,10 +1,10 @@
 ---
-title: "Host Multiple Services in EKS with One LoadBalancer Using NGINX Ingress and Cloudflare"
-description: "Learn how to expose multiple services in your AWS EKS cluster using a single LoadBalancer with NGINX Ingress Controller and domain mapping through Cloudflare."
+title: "Deploy NGINX Ingress Controller on AWS EKS with HTTP and TCP Routing via Single LoadBalancer"
+description: "Step-by-step guide to deploying NGINX Ingress Controller on AWS EKS to route HTTP and TCP services through a single LoadBalancer. Includes DNS setup with Cloudflare, Helm deployment, and YAML examples."
 date: "2025-04-23"
 tags: [AWS, EKS, Kubernetes, NGINX, Cloudflare, DevOps, Ingress]
 author: Nida Sahar
-keywords: [EKS ingress setup, NGINX ingress controller, single LoadBalancer, Cloudflare DNS, Kubernetes routing]
+keywords: [EKS ingress, NGINX controller setup, TCP routing Kubernetes, HTTP host routing, Cloudflare DNS mapping, Helm ingress-nginx, single LoadBalancer EKS, Kubernetes ingress example,expose PostgreSQL EKS, Kubernetes NGINX TCP config]
 ---
 
 
@@ -24,9 +24,9 @@ Get started with EKS in the [AWS EKS User Guide](https://docs.aws.amazon.com/eks
 
 ---
 
-##  Step 1: Deploy NGINX Ingress Controller using Helm
+##  Step 1: Install NGINX Ingress Controller on EKS using Helm
 
-![Illustration of the NGINX Ingress Controller Helm deployment process](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/4380747.jpg)
+<img src={require('./img/4380747.jpg').default} alt="Diagram showing Helm deployment of NGINX Ingress Controller on EKS." width="600" height="500"/>
 <br/>
 
 ```bash
@@ -54,7 +54,7 @@ Learn more about NGINX Ingress at the [official Kubernetes documentation](https:
 
 ##  Step 2: Create Your Ingress YAML for Host-Based Routing
 
-![Illustration of a group of people holding a banner representing Ingress YAML configuration for host-based routing](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/66176.jpg)
+<img src={require('./img/66176.jpg').default} alt="Team collaborating on Kubernetes Ingress YAML configuration for host routing." width="600" height="500"/>
 <br/>
 
 Below is an example Ingress manifest to expose a service using a custom domain:
@@ -90,9 +90,9 @@ kubectl apply -f your-ingress.yaml
 
 ---
 
-##  Step 3: Configure Domain in Cloudflare
+##  Step 3: Configure DNS for NGINX Ingress with Cloudflare
 
-![Illustration of Cloudflare DNS record configuration showing A and CNAME records for a domain.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/3497813.jpg)
+<img src={require('./img/3497813.jpg').default} alt="DevOps engineer configuring Cloudflare DNS records for NGINX Ingress routing." width="600" height="500"/>
 <br/>
 
 Go to your Cloudflare dashboard and create a CNAME record:
@@ -107,8 +107,7 @@ Understand DNS management in Cloudflare with the [Cloudflare DNS docs](https://d
 
 ---
 
-##  Verify the Setup
-
+##  Verify NGINX Ingress Routing and Domain Configuration
 Try accessing the domain in your browser:
 
 ```
@@ -126,7 +125,7 @@ For more detailed steps and examples, check out this shared doc:
 
 ---
 
-##  Benefits of This Setup
+##  Benefits of Using NGINX Ingress with Single LoadBalancer
 
 - **Cost-effective**: One LoadBalancer for all services.
 - **Scalable**: Add new routes/domains by just updating the Ingress.
@@ -135,7 +134,7 @@ For more detailed steps and examples, check out this shared doc:
 
 ---
 
-##  Conclusion
+##  Conclusion: Efficient Multi-Service Exposure in EKS with NGINX
 
 Exposing multiple services in EKS using a single LoadBalancer with NGINX Ingress can streamline your infrastructure and reduce costs. Just remember:
 

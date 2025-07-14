@@ -1,10 +1,10 @@
 ---
 title: "Enhancing LLMs with Retrieval-Augmented Generation (RAG): A Technical Deep Dive"
-description: "Learn how RAG architecture supercharges Large Language Models by integrating real-time, domain-specific knowledge. Includes code samples, architecture breakdowns, and best practices."
+description: "Supercharge LLMs with Retrieval-Augmented Generation (RAG) using real-time knowledge and embeddings. Explore architecture, code examples, and best practices."
 date: "2025-05-05"
 tags: [LLMs, RAG, AI, NLP, Vector Databases, OpenAI, LlamaIndex, Embeddings]
 author: vivek
-keywords: [Retrieval-Augmented Generation, LLMs, Vector Databases, Embeddings, NLP, GPT, RAG vs Fine-Tuning]
+keywords: [Retrieval-Augmented Generation, LLMs, Vector Databases, Embeddings, NLP, GPT, RAG implementation, RAG vs Fine-Tuning, OpenAI, LlamaIndex, FAISS, Pinecone]
 ---
 
 
@@ -15,9 +15,9 @@ This is where [Retrieval-Augmented Generation (RAG)](https://ai.meta.com/blog/re
 
 ---
 
-## What is RAG?
+## What Is Retrieval-Augmented Generation (RAG)?
 
-![Illustration of people discussing what RAG is](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/10235204.jpg)
+<img src={require('./img/10235204.jpg').default} alt="Illustration showing team discussing Retrieval-Augmented Generation (RAG)" width="600" height="450"/>
 <br/>
 
 
@@ -32,7 +32,7 @@ Learn more from the original [RAG paper by Facebook AI](https://research.faceboo
 
 ---
 
-## Why Use RAG?
+## Why Use Retrieval-Augmented Generation for LLMs?
 
 Here are some compelling reasons to adopt RAG:
 
@@ -44,9 +44,9 @@ Here are some compelling reasons to adopt RAG:
 
 ---
 
-## Core Components of a RAG System
+## Core Components of a Retrieval-Augmented Generation System
 
-![Illustration showing components of a RAG system](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20943637.jpg)
+<img src={require('./img/20943637.jpg').default} alt="Diagram of core components in a Retrieval-Augmented Generation system" width="600" height="450"/>
 <br/>
 
 
@@ -64,7 +64,7 @@ query = "What is RAG in AI?"
 retrieved_docs = retriever.retrieve(query, top_k=3)
 ```
 
-### 2. Knowledge Base
+### 2. Building Your Knowledge Base with Vector Embeddings
 
 Your retriever needs a knowledge base with embedded documents.
 
@@ -88,7 +88,7 @@ index = faiss.IndexFlatL2(len(embeddings[0]))
 index.add(embeddings)
 ```
 
-### 3. LLM Integration
+### 3. Integrating the LLM for Contextual Answer Generation
 
 After retrieval, the documents are passed to the LLM along with the query.
 
@@ -109,9 +109,9 @@ You can experiment with Hugging Face’s [Transformers library](https://huggingf
 
 ---
 
-## Best Practices & Considerations
+## Best Practices for Building Effective RAG Systems
 
-![Illustration showing best practices for using RAG](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/10735306.jpg)
+<img src={require('./img/10735306.jpg').default} alt=" Visual highlighting best practices for building efficient RAG workflows " width="600" height="450"/>
 <br/>
 
 

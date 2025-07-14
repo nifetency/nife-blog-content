@@ -1,10 +1,10 @@
 ---
-title: "Troubleshooting PHP Installation: A Developer's Guide to Solving PHP Setup Issues"
-description: "A practical and beginner-friendly guide to fixing common PHP installation issues, from missing php.ini files to PHP-FPM crashes."
+title: "PHP Installation Troubleshooting Guide: Fix php.ini, PHP-FPM, and 502 Errors on Ubuntu, macOS, and CentOS"
+description: "Learn how to fix common PHP installation issues including missing php.ini, PHP-FPM not running, PHPRC misconfiguration, and 502 Bad Gateway errors on Ubuntu, CentOS, and macOS."
 date: "2025-04-11"
 tags: [PHP, PHP Installation, PHP-FPM, Web Development, Server Configuration, PHP Setup]
 author: Nida Sahar
-keywords: [PHP not found, php.ini missing, php-fpm restart, 502 Bad Gateway PHP, PHPRC, Bitnami PHP, Troubleshooting PHP, Ubuntu PHP, PHP config]
+keywords: [PHP not found, php.ini missing, php-fpm restart, 502 Bad Gateway PHP, PHPRC, Bitnami PHP, Troubleshooting PHP, Ubuntu PHP, PHP config, PHP installation guide, PHP-FPM issues, PHP setup, PHP error log, PHP environment variables, PHP extensions]
 ---
 
 
@@ -16,9 +16,9 @@ In this guide, we’re going to walk through the most common PHP installation is
 
 ---
 
-## First, What Makes Up a PHP Setup?
+## Components of a PHP Setup: Binary, php.ini, Extensions, and PHP-FPM
 
-![Illustration showing components of a PHP setup including PHP binary, php.ini file, extensions, PHP-FPM, and web server](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/3857425.jpg)
+<img src={require('./img/3857425.jpg').default} alt="Diagram of PHP setup components including binary, php.ini, extensions, and PHP-FPM" width="500" height="450"/>
 <br/>
 
 Before diving into the fix-it steps, let’s quickly look at the key parts of a typical PHP setup:
@@ -33,13 +33,13 @@ Understanding how these parts work together makes troubleshooting way easier. No
 
 ---
 
-## 1. PHP Not Found? Let’s Install It
+##  1. PHP Command Not Found? How to Install PHP on Ubuntu, CentOS, or macOS
 
 Tried running `php -v` and got a "command not found" error? That means PHP isn’t installed—or your system doesn’t know where to find it.
 
 ### Install PHP
 
-![Visual representation of PHP installation on different operating systems including Ubuntu, CentOS, and macOS](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6106299.jpg)
+<img src={require('./img/6106299.jpg').default} alt="Illustration showing PHP installation steps on Ubuntu, CentOS, and macOS" width="500" height="450"/>
 <br/>
 
 **On Ubuntu:**
@@ -71,7 +71,7 @@ If that doesn’t work, check if PHP is in your system’s `$PATH`. If not, you�
 
 ---
 
-## 2. No `php.ini` File? Here’s the Fix
+## 2.Missing php.ini? How to Locate or Create Your PHP Configuration File
 
 You’ve installed PHP, but it’s not picking up your `php.ini` configuration file? You might see something like:
 
@@ -99,7 +99,7 @@ Then restart PHP or PHP-FPM to apply the changes.
 
 ---
 
-## 3. Set Your `PHPRC` Variable
+## 3. How to Set the PHPRC Variable to Load Your Custom php.ini File
 
 Still no luck loading the config? Set the `PHPRC` environment variable to explicitly tell PHP where your config file lives:
 
@@ -118,7 +118,7 @@ Learn more: [PHP Environment Variables Explained](https://www.w3schools.in/php/e
 
 ---
 
-## 4. PHP-FPM Not Running? Restart It
+## 4. PHP-FPM Crashed? Restart PHP FastCGI Process to Fix 502 Errors
 
 Getting a 502 Bad Gateway? That usually means PHP-FPM is down.
 
@@ -149,7 +149,7 @@ If not, check the logs (see below).
 
 ---
 
-## 5. Development vs. Production Settings
+## 5. php.ini-development vs php.ini-production: Which Should You Use?
 
 PHP offers two default config templates:
 
@@ -166,7 +166,7 @@ More details: [PHP Runtime Configuration](https://www.php.net/manual/en/ini.core
 
 ---
 
-## 6. Still Stuck? Check the Logs
+## 6.  Still Stuck? Use PHP and PHP-FPM Logs to Debug Errors
 
 Logs are your best friends when troubleshooting.
 
@@ -186,9 +186,9 @@ These will give you insight into config issues, missing extensions, and more.
 
 ---
 
-## Conclusion
+## Conclusion: How to Get PHP Running Smoothly Across Different Environments
 
-![Conceptual image representing successful PHP setup and troubleshooting completion](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/3891942.jpg)
+<img src={require('./img/3891942.jpg').default} alt="Conceptual illustration of a successful PHP installation and debugging completion" width="500" height="450"/>
 <br/>
 
 Getting PHP working can be frustrating at first, but once you understand the pieces—PHP binary, `php.ini`, extensions, PHP-FPM, and the web server—it’s much easier to fix issues when they pop up.

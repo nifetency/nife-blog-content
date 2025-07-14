@@ -1,10 +1,10 @@
 ---
-title: "Setting Up NGINX Ingress Controller in EKS with HTTP and TCP Routing"
-description: "Learn how to deploy NGINX Ingress Controller in AWS EKS to route both HTTP and TCP traffic through a single LoadBalancer, reducing costs and simplifying architecture."
+title: "Deploy NGINX Ingress Controller on AWS EKS with HTTP and TCP Routing via Single LoadBalancer"
+description: "Step-by-step guide to deploying NGINX Ingress Controller on AWS EKS to route HTTP and TCP services through a single LoadBalancer. Includes DNS setup with Cloudflare, Helm deployment, and YAML examples"
 date: "2025-04-24"
 tags: [AWS, EKS, Kubernetes, NGINX, Ingress, LoadBalancer, Cloudflare, DevOps]
 author: Nida Sahar
-keywords: [EKS ingress, NGINX controller setup, TCP routing Kubernetes, HTTP host routing, Cloudflare DNS mapping]
+keywords: [EKS ingress, NGINX controller setup, TCP routing Kubernetes, HTTP host routing, Cloudflare DNS mapping, Helm ingress-nginx, single LoadBalancer EKS, Kubernetes ingress example,expose PostgreSQL EKS, Kubernetes NGINX TCP config]
 ---
 
 
@@ -19,10 +19,10 @@ This guide explains how to:
 
 ---
 
-##  Why Use Ingress in EKS?
+##  Why Use NGINX Ingress Controller in AWS EKS ?
 
 
-![Illustration of a confused man and woman surrounded by question marks, representing the question: Why Use Ingress in EKS?](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/5217215.jpg)
+<img src={require('./img/5217215.jpg').default} alt="Confused users evaluating Kubernetes ingress options in AWS EKS" width="550" height="500"/>
 <br/>
 
 
@@ -48,10 +48,10 @@ This guide explains how to:
 
 ---
 
-##  Step 1: Install NGINX Ingress Controller via Helm
+##  Step 1: Install NGINX Ingress Controller on EKS using Helm
 
 
-![Illustration of Person with wrench and gear symbolizing NGINX Ingress Controller installation via Helm ](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/9907646.jpg)
+<img src={require('./img/9907646.jpg').default} alt="Person setting up NGINX Ingress Controller via Helm in a Kubernetes environment" width="550" height="500"/>
 <br/>
 
 
@@ -66,7 +66,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx \
 ```
 
 
-For advanced configurations, refer to the [official NGINX Ingress Helm chart documentation]("https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx").
+For advanced configurations, refer to the [official NGINX Ingress Helm chart documentation](https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx).
 
 This exposes the controller via a single ELB.
 
@@ -85,9 +85,9 @@ a1b2c3d4e5f6g7.elb.amazonaws.com
 
 ---
 
-##  Step 3: Set Up DNS in Cloudflare
+##  Step 3:  Configure DNS for NGINX Ingress with Cloudflare
 
-![Person configuring website DNS settings on a large screen, representing DNS setup in Cloudflare](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6030573.jpg)
+<img src={require('./img/6030573.jpg').default} alt="DevOps engineer configuring DNS records in Cloudflare for EKS ingress routing" width="600" height="500"/>
 <br/>
 
 
@@ -140,7 +140,7 @@ Learn more about Ingress annotations in the [Kubernetes Ingress documentation](h
 
 ---
 
-##  Step 5: Add TCP Support (Optional)
+##  Step 5:  Enable TCP Routing in NGINX Ingress (Optional)
 
 ### Step 5.1: Create TCP ConfigMap
 
@@ -211,7 +211,7 @@ ports:
 
 ---
 
-##  Conclusion
+##  Conclusion: Unified HTTP and TCP Routing on EKS with Ingress
 
 With this setup, you can serve both HTTP and TCP apps in your EKS cluster using a **single LoadBalancer**, simplifying your architecture and saving costs. HTTP traffic is managed using Ingress resources with host rules, while TCP apps like databases are handled using a custom ConfigMap.
 

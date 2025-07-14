@@ -1,8 +1,7 @@
 ---
-title: 'Fix Nginx Infinite Redirect Loops: A Step-by-Step Guide'
-description: "This guide provides a comprehensive solution for resolving frustrating infinite redirect loops between HTTP and HTTPS in your Nginx website configuration. Learn how to correctly configure Nginx to ensure smooth and secure redirection of traffic."
-keywords: [Nginx, redirect loop, HTTP to HTTPS, SSL, 301 redirect, Nginx configuration, website security]
-
+title: 'Fix "Too Many Redirects" in Nginx: Prevent Infinite HTTP to HTTPS Loops'
+description: "Fix Nginx redirect loops caused by HTTP to HTTPS misconfigurations. Learn how to stop 'Too Many Redirects' errors with correct server block setup for fast, secure site access."
+keywords: [ Nginx redirect loop,infinite redirects Nginx,Too Many Redirects Nginx,Nginx HTTP to HTTPS redirect,Nginx 301 redirect configuration,fix redirect loop Nginx,Nginx SSL HTTPS setup,redirect error troubleshooting,secure Nginx server setup,Nginx HTTPS best practices]
 date: "2025-03-31"
 tags: [Nginx, HTTPS, redirect, troubleshooting, webserver]
 author: Nida Sahar
@@ -12,25 +11,25 @@ author: Nida Sahar
 
 Encountering endless redirects between HTTP and HTTPS on your Nginx website? This common issue, often called an "infinite redirect loop," can be frustrating. [Stack Overflow](https://stackoverflow.com/questions/56092994/how-can-i-fix-chrome-infinite-redirect) This guide provides a step-by-step solution to configure Nginx for smooth and secure redirection.
 
-## Understanding Infinite Redirect Loops
+## What Are Nginx Infinite Redirect Loops and Why They Happen
 
-![A screenshot of a web browser displaying the Too Many Redirects error message.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/4574122.jpg)
+<img src={require('./img/4574122.jpg').default} alt="Screenshot of Chrome showing Too Many Redirects error from Nginx misconfiguration" width="600" height="450"/>
 <br/>
 
 The goal of HTTP to HTTPS redirection is simple: automatically route `http://yourdomain.com` requests to `https://yourdomain.com`.  However, misconfiguration can create a cycle where Nginx repeatedly redirects between HTTP and HTTPS, preventing users from accessing the page and resulting in the dreaded "Too Many Redirects" browser error. [sitechecker](https://sitechecker.pro/site-audit-issues/redirect-loop/) 
 
-## Solving Infinite Redirect Loops in Nginx
+## How to Fix Infinite Redirect Loops in Nginx (Step-by-Step)
 
 
 
-![A diagram showing an HTTP request being redirected to HTTPS, then incorrectly back to HTTP, creating an infinite loop.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/3053856.jpg)
+<img src={require('./img/3053856.jpg').default} alt="Diagram of HTTP to HTTPS loop causing Nginx redirect error" width="600" height="450"/>
 <br/>
 
 This guide provides a solution to configure Nginx correctly, eliminating frustrating redirect loops. [checkout infinite redirect for next js](https://github.com/clerk/javascript/issues/1436) 
 
-### 1. Redirect HTTP to HTTPS
+### Step 1: Redirect HTTP to HTTPS Properly in Nginx
 
-![A code snippet showing the correct Nginx configuration for redirecting HTTP to HTTPS, highlighting the `return 301` line.](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/5326066.jpg)
+<img src={require('./img/5326066.jpg').default} alt="Code example: Nginx 301 redirect configuration from HTTP to HTTPS" width="600" height="450"/>
 <br/>
 
 
@@ -53,7 +52,7 @@ server {
 *   `server_name yourdomain.com;`: Specifies the domain to redirect.
 *   `return 301 https://$host$request_uri;`:  Performs a permanent (301) redirect to the HTTPS version, preserving the original URL path. [community.cloudflare](https://community.cloudflare.com/t/infinite-redirect-loop/164210) 
 
-### 2. Configure the HTTPS Server Block
+### Step 2: Setup a Secure HTTPS Server Block in Nginx
 
 This server block handles HTTPS requests on port 443 and utilizes your SSL certificates:
 
@@ -78,12 +77,12 @@ server {
 
 
 
-### 3. Preventing Redirect Loops: The Crucial Step
+### Step 3: Avoid Nginx Redirect Loops with Clean Separation
 
 The key to preventing loops is to ensure that redirection occurs *only* from HTTP to HTTPS.  Avoid configuring redirects within the HTTPS server block.  Keep the HTTP block solely for redirection and the HTTPS block for serving secure content. [nife.io](https://nife.io/solutions/One%20Click%20Deployment) - Web development reference
 
 
-### 4. Test and Reload Nginx
+### Step 4: Validate and Reload Nginx Configuration
 
 Before restarting Nginx, test your configuration:
 
@@ -97,11 +96,11 @@ If no errors are reported, reload Nginx:
 sudo systemctl reload nginx
 ```
 
-### 5. Clearing Browser Cache (If Necessary)
+### Step 5: Clear Browser Cache to Fix Persistent Redirects
 
 If the "Too Many Redirects" error persists, clearing your browser's cache and cookies might resolve the issue.
 
-## **Conclusion**
+## Final Thoughts: Best Practices to Prevent Redirect Loops
 
 Setting up an HTTP to HTTPS redirect in Nginx is pretty simple, but getting it right is key to avoiding endless redirect loops. The best way to do it is by setting up two separate server blocks—one to catch HTTP traffic and send it to HTTPS, and another to handle secure HTTPS connections.  
 

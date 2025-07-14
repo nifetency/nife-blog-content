@@ -1,10 +1,10 @@
 ---
-title: "Understanding Windows IIS (Internet Information Services)"
-description: "Explore the core features, components, configuration steps, and troubleshooting tips for Microsoft's IIS web server."
+title: "Windows IIS (Internet Information Services) Guide: Setup, Configuration, and Troubleshooting"
+description: "Learn how to configure, secure, and troubleshoot Windows IIS (Internet Information Services) web server for hosting ASP.NET, Python, and PHP applications."
 date: "2025-04-29"
 tags: [IIS, Windows Server, Web Hosting, ASP.NET, Python, DevOps]
 author: vivek
-keywords: [IIS guide, Windows Server IIS, FastCGI, host Python on IIS, IIS setup]
+keywords: [IIS guide, Windows Server IIS, FastCGI, host Python on IIS, IIS setup, IIS troubleshooting, IIS application pools, SSL configuration, ASP.NET hosting, Python FastCGI]
 ---
 
 
@@ -15,9 +15,9 @@ In this guide, we’ll walk through what IIS is, its key components, common use 
 
 ---
 
-##  What is IIS?
+##  What Is Windows Internet Information Services (IIS)?
 
-![Illustration of a thinking brain representing the concept of IIS and server logic](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/7718868.jpg)
+<img src={require('./img/7718868.jpg').default} alt="Illustration of server logic representing Windows IIS functionality" width="600" height="550"/>
 <br/>
 
 IIS is a feature-rich web server that supports multiple protocols including HTTP, HTTPS, FTP, FTPS, SMTP, and WebSocket. It’s often chosen in Windows-centric environments for its performance, flexibility, and ease of use.For an official overview, check out [Microsoft’s IIS documentation](https://learn.microsoft.com/en-us/iis/).
@@ -31,7 +31,7 @@ IIS provides powerful security controls, application isolation via application p
 
 ---
 
-##  Core Components of IIS
+##  Key Components of Windows IIS Web Server
 
 ###  IIS Manager
 The graphical user interface for managing IIS settings, websites, and application pools.
@@ -50,9 +50,9 @@ IIS makes it easy to configure HTTPS, manage SSL certificates, and enforce secur
 
 ---
 
-##  Key Features
+##  Top Features and Benefits of IIS
 
-![Person unlocking a padlock symbolizing IIS security and feature access](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/5343877.jpg)
+<img src={require('./img/5343877.jpg').default} alt="Illustration of security and feature access in Windows IIS" width="600" height="550"/>
 <br/>
 
 ###  Security & Authentication
@@ -66,7 +66,7 @@ Features like output caching, dynamic compression, and bandwidth throttling help
 
 ---
 
-##  How to Configure IIS on Windows Server
+##  Step-by-Step Guide to Installing and Configuring IIS on Windows Server
 
 ###  Install IIS
 1. Open **Server Manager** → **Add Roles and Features**
@@ -93,9 +93,9 @@ Ensure that IIS has **read** (and optionally **write**) permissions on your site
 
 ---
 
-##  Troubleshooting Common Issues
+##  Troubleshooting Common IIS Issues and Solutions
 
-![Engineer pointing at a screen with gears representing IIS troubleshooting and diagnostics](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6100980.jpg)
+<img src={require('./img/6100980.jpg').default} alt="Engineer troubleshooting IIS server issues with diagnostic tools" width="600" height="550"/>
 <br/>
 
 ###  Website Not Starting
@@ -116,7 +116,7 @@ Ensure that IIS has **read** (and optionally **write**) permissions on your site
 
 For more community-driven insights, explore the [Microsoft IIS Tech Community](https://techcommunity.microsoft.com/category/microsoft-iis).
 
-##  Conclusion
+##  Conclusion: Maximizing IIS for Your Windows Web Hosting Needs
 
 IIS remains a top-tier web server solution for Windows environments. Whether you're running enterprise ASP.NET applications or lightweight Python services, IIS delivers in performance, security, and manageability.
 

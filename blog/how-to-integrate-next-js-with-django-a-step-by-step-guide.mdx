@@ -15,12 +15,12 @@ After completing this tutorial, you will have a functional setup in which Next.j
 
 
 
-![Integrate Next.js with Django](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/nextjs+django.png)
+<img src={require('./img/nextjs+django.png').default} alt="Integrate Next.js with Django" width="700" height="350"/>
 <br/>
 ---
 
 ## Why Use Next.js with Django?
-:white_check_mark: **Fast Rendering**: Next.js supports [SSR (Server-Side Rendering)](https://nextjs.org/docs/basic-features/pages#server-side-rendering) and SSG (Static Site Generation), improving performance.
+:white_check_mark: **Fast Rendering**: Next.js supports [SSR (Server-Side Rendering)](https://nextjs.org/docs/pages/building-your-application/rendering/server-side-rendering) and SSG (Static Site Generation), improving performance.
 
 :white_check_mark: **Separation of Concerns**: Business logic is handled by Django, and UI rendering is done by Next.js.
 
@@ -139,9 +139,9 @@ Run the server:
 python manage.py runserver
 ```
 
-You can now access book reviews at [http://127.0.0.1:8000/api/reviews/](http://127.0.0.1:8000/api/reviews/).
+You can now access book reviews at [vercel](https://vercel.com/).
 
----
+--
 
 ## Step 2: Setting Up Next.js as the Frontend
 
@@ -190,7 +190,7 @@ Run:
 npm run dev
 ```
 
-Visit [http://localhost:3000/](http://localhost:3000/) to see book reviews fetched from Django!
+Visit [http://localhost:3000](https://localhosts.mobi/3000) to see book reviews fetched from Django!
 
 ---
 

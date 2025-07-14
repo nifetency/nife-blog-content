@@ -1,0 +1,168 @@
+---
+title: "Understanding Kubernetes and Its Core Components – A Technical Deep Dive"
+description: "Explore the core architecture of Kubernetes including control plane components, node agents, and key objects used in cloud-native application orchestration."
+date: "2025-07-02"
+tags: [Kubernetes, DevOps, Cloud Native, Container Orchestration]
+author: vivek
+keywords: [Kubernetes Architecture,Kubernetes Components,kube-apiserver,etcd Kubernetes,Kubernetes Node,Kubernetes Deployment,Declarative Configuration,Cloud Native Infrastructure]
+---
+
+If you've spent any time in the world of DevOps, SRE, or modern software delivery, you've heard the word **Kubernetes** (or just **K8s**). But beyond the buzzword status, Kubernetes is a powerhouse system for managing containerized workloads at scale with flexibility, resiliency, and automation baked in.
+
+In this blog, we'll break down the core components of Kubernetes, explain how they work together under the hood, and help you understand what actually runs inside a Kubernetes cluster.
+
+## What Is Kubernetes?
+
+<img src={require('./img/5159616.jpg').default} alt="What is Kubernetes - Developer understanding Kubernetes architecture and container orchestration" width="550" height="450"/>
+<br/>
+
+Kubernetes is an open-source container orchestration system originally developed by Google and now maintained by the [Cloud Native Computing Foundation (CNCF)](https://www.cncf.io/). Its primary job is to automate deployment, scaling, and management of containerized applications.
+
+Think of Kubernetes as the **operating system for your cloud-native applications** — providing the abstraction and control layer for apps running in containers (like those built with Docker, Podman, etc.).
+
+Learn more about : [Kubernetes official documentation](https://kubernetes.io/docs/)
+
+---
+
+## High-Level Architecture: Control Plane vs. Node Components
+
+A Kubernetes cluster is split into two main categories of components:
+
+- **Control Plane** – the brain of the cluster
+- **Node Components** – the workers that run containers
+
+Let's break them down.
+
+---
+
+###  Control Plane Components
+
+The Control Plane manages the overall state of the cluster. It makes decisions (e.g., scheduling, reacting to failures) and exposes APIs for cluster interaction.
+
+#### 1. kube-apiserver
+
+- The front door of the cluster. Every request — from kubectl, Helm, CI/CD pipelines — hits the kube-apiserver.
+- Stateless and can be scaled horizontally.
+- Validates and processes REST requests, then updates the desired state in etcd.
+
+For more details about [API Server deep dive](https://kubernetes.io/docs/concepts/overview/components/#kube-apiserver)
+
+#### 2. etcd
+
+- A highly available key-value store used as Kubernetes' single source of truth.
+- Stores all cluster data: nodes, pods, secrets, configs, etc.
+- Built for distributed systems with strong consistency guarantees.
+
+🔗 [What is etcd?](https://etcd.io/docs/)
+
+#### 3. kube-scheduler
+
+- Watches for unscheduled pods and assigns them to appropriate nodes based on:
+  - Resource availability
+  - Affinity/anti-affinity rules
+  - Node taints/tolerations
+  - Custom scheduling rules
+
+Know more about  [Scheduling concepts](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
+
+#### 4. kube-controller-manager
+
+- Runs all the built-in controllers as separate loops: replication controller, job controller, service account controller, etc.
+- Each controller compares the desired state (from etcd) vs. the current state and makes adjustments.
+
+🔗 [Controller Manager](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/)
+
+#### 5. cloud-controller-manager
+
+- In cloud environments (AWS, GCP, Azure), this separates cloud-specific logic — like attaching volumes or provisioning load balancers — from the core controllers.
+
+---
+
+###  Node Components
+
+<img src={require('./img/5360851.jpg').default} alt="Kubernetes Node Components - kubelet, kube-proxy, and container runtime architecture" width="550" height="450"/>
+<br/>
+
+These components run on every worker node in the cluster and are responsible for running and managing containers.
+
+#### 1. kubelet
+
+The primary node agent. It:
+
+- Talks to the kube-apiserver
+- Ensures the containers are running as specified in PodSpecs
+- Collects pod status and resource usage
+
+#### 2. kube-proxy
+
+Handles networking for Services. It:
+
+- Sets up NAT rules using iptables or IPVS
+- Routes external and internal traffic to the appropriate Pod IPs
+
+#### 3. Container Runtime
+
+The engine that runs containers. Kubernetes supports any CRI-compatible runtime like:
+
+- containerd
+- CRI-O
+- (Previously) Docker (deprecated from v1.24)
+
+🔗 [Container runtimes](https://kubernetes.io/docs/setup/production-environment/container-runtimes/)
+
+---
+
+###  Add-ons and Enhancements
+
+<img src={require('./img/20943960.jpg').default} alt="Kubernetes Add-ons and Enhancements - Monitoring, Ingress, DNS, and Metrics Tools explored by developer" width="550" height="450"/>
+<br/>
+
+While not part of the core architecture, most production clusters include these:
+
+- **CoreDNS** – Internal DNS resolver
+- **Ingress Controller** – NGINX, Traefik, or cloud-based ingress for HTTP routing
+- **Metrics Server** – Provides CPU/memory metrics for autoscaling
+- **Prometheus + Grafana** – Monitoring and alerting stack
+- **Dashboard** – Web-based UI for the cluster
+
+---
+
+##  Kubernetes Objects (Declarative API)
+
+The components above run the system, but what you deploy are Kubernetes objects:
+
+| Object        | Description                                  |
+| ------------- | -------------------------------------------- |
+| Pod           | Smallest deployable unit (one or more containers) |
+| Service       | Exposes pods as network services            |
+| Deployment    | Manages replica sets for stateless apps     |
+| StatefulSet   | Manages stateful workloads with stable IDs  |
+| DaemonSet     | Runs a pod on all (or some) nodes           |
+| Job/CronJob   | Handles batch and scheduled jobs            |
+| ConfigMap/Secret | Inject config or secrets into pods        |
+
+---
+
+##  How It All Works Together
+
+Let's say you deploy a Deployment with kubectl:
+
+1. You submit a YAML manifest.
+2. `kubectl` sends it to the kube-apiserver.
+3. kube-controller-manager notices the new deployment and creates ReplicaSets and Pods.
+4. kube-scheduler picks nodes for those Pods.
+5. kubelet on the nodes talks to the container runtime and starts the containers.
+6. kube-proxy ensures networking is set up so traffic can reach the pod.
+
+All this happens automatically and declaratively — you only specify **what** you want, not **how** to do it.
+Read more about [Kubernetes Declarative Model](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/)
+
+---
+
+## Final Thoughts
+
+Kubernetes is powerful because of its modular design and declarative model. Whether you're deploying a blog or scaling microservices to millions of users, the same components orchestrate it all.
+
+Mastering these components gives you deep visibility and control over your infrastructure.
+
+To get started with production-grade Kubernetes environments, explore how Nife enables you to Add [AWS EKS Clusters](https://nife.io/solutions/Add%20AWS%20EKS%20Clusters) with ease and [Deploy Containerized Apps](https://nife.io/solutions/Deploy%20Containerized%20Apps) seamlessly across your infrastructure.

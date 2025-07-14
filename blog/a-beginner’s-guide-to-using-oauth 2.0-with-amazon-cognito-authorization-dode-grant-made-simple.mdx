@@ -1,10 +1,10 @@
 ---
-title: "A Beginner’s Guide to Using OAuth 2.0 with Amazon Cognito: Authorization Code Grant Made Simple"
-description: "Learn how to use OAuth 2.0 Authorization Code Grant flow with Amazon Cognito in a human-friendly, step-by-step guide."
+title: "How to Use OAuth 2.0 Authorization Code Grant with Amazon Cognito (Beginner-Friendly Guide)"
+description: "Learn how to securely implement OAuth 2.0 Authorization Code Grant flow using Amazon Cognito—step-by-step, with examples and best practices."
 date: "2025-04-14"
 tags: [OAuth2.0, Amazon Cognito, Authentication, AWS, Web Development, Identity Management]
 author: Nida Sahar
-keywords: [OAuth 2.0 Cognito, Cognito Auth Code Grant, AWS login, Secure App Authentication, Amazon Cognito Setup]
+keywords: [Amazon Cognito OAuth 2.0 guide, AWS Cognito login setup, Authorization Code Grant AWS,Cognito OAuth token exchange, secure authentication AWS Cognito,OAuth 2.0 implementation with Cognito, web app authentication AWS]
 ---
 
 
@@ -15,10 +15,10 @@ In this post, we’ll break down how to use Amazon Cognito with the OAuth 2.0 Au
 
 ---
 
-## What is Amazon Cognito?
+## What is Amazon Cognito? How It Helps with Login
 
-![Illustration of Amazon Cognito features like user sign-up, login options, and secure access](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/10306562.jpg)
-
+<img src={require ('./img/10306562.jpg').default} alt="Visual representation of Amazon Cognito user pool and identity pool managing AWS authentication" width="500" height="400"/>
+<br/>
 
 Amazon Cognito is a user authentication and authorization service from AWS. Think of it as a toolbox for managing sign-ups, logins, and secure access to your app. Here’s what it can do:
 
@@ -31,7 +31,7 @@ Amazon Cognito is a user authentication and authorization service from AWS. Thin
 
 ---
 
-## Why Use Amazon Cognito?
+## Benefits of Using Amazon Cognito
 
 - **Scales with your app:** Handles millions of users effortlessly.
 - **Secure token management:** Keeps user credentials and sessions safe.
@@ -45,10 +45,10 @@ It’s like plugging in a powerful login system without reinventing the wheel.
 
 ---
 
-## How Amazon Cognito Works ?
+##  How Amazon Cognito Works (User Pools vs. Identity Pools)
 
-![Diagram showing how Amazon Cognito User Pools and Identity Pools manage authentication and AWS access](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20945218.jpg)
-
+<img src={require ('./img/20945218.jpg').default} alt="OAuth 2.0 Authorization Code Grant flow diagram integrated with Amazon Cognito user login" width="500" height="400"/>
+<br/>
 
 Cognito is split into two parts:
 
@@ -64,10 +64,10 @@ When using OAuth 2.0, most of the action happens in the **user pool**.
 
 ---
 
-## Step-by-Step: Using OAuth 2.0 Authorization Code Grant with Cognito
+## Step-by-Step: How to Use OAuth 2.0 Authorization Code Grant Flow
 
-![Flowchart of OAuth 2.0 Authorization Code Grant flow using Amazon Cognito](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20943502.jpg)
-
+<img src={require ('./img/20943502.jpg').default} alt="Flowchart of OAuth 2.0 Authorization Code Grant flow using Amazon Cognito" width="500" height="400"/>
+<br/>
 
 ### Step 1: Create a User Pool
 1. Head over to the AWS Console and create a new **User Pool**.
@@ -140,12 +140,12 @@ curl -X GET "https://your-api.com/resource" \
 
 ---
 
-## When to Use Authorization Code Grant?
+## When Should You Use Authorization Code Grant Flow?
 This flow is ideal for server-side apps. It keeps sensitive data (like tokens) away from the browser, making it more secure.
 
 ---
 
-## Why This Setup Rocks
+##  Benefits of Using Cognito + OAuth 2.0 Together
 
 - **Security-first:** Tokens are exchanged on the backend.
 - **Scalable:** Works even if your app grows to millions of users.
@@ -153,7 +153,7 @@ This flow is ideal for server-side apps. It keeps sensitive data (like tokens) a
 
 ---
 
-## Conclusion
+##  Final Thoughts: A Simple, Secure Login with Cognito + OAuth 2.0
 
 Amazon Cognito takes the pain out of managing authentication. Combine it with OAuth 2.0’s Authorization Code Grant, and you’ve got a secure, scalable login system that just works.
 Start experimenting with Cognito and see how quickly you can secure your app.

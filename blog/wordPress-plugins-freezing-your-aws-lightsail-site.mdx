@@ -1,9 +1,9 @@
 ---
-title: 'How to Fix a WordPress Site Stuck at 33% Loading on AWS Lightsail'
-description: "Is your WordPress site on AWS Lightsail freezing at 33%? This guide walks you through SSH-based troubleshooting to pinpoint and fix the misbehaving plugin causing the issue."
+title: 'Fix WordPress Site Stuck at 33% on AWS Lightsail: Disable Problem Plugins via SSH'
+description: "Troubleshoot and fix a WordPress site stuck at 33% on AWS Lightsail by disabling plugins via SSH, identifying conflicts, and restoring site performance step by step."
 date: "2025-04-9"
 tags: [WordPress, AWS Lightsail, SSH, Plugin Issues, Troubleshooting, Site Performance, Web Hosting]
-keywords: [WordPress stuck at 33%, AWS Lightsail plugin issue, troubleshoot WordPress freeze, disable plugins via SSH, fix WordPress loading problem, Lightsail troubleshooting, wp-content plugins folder]
+keywords: [WordPress stuck at 33%, AWS Lightsail plugin issue, troubleshoot WordPress freeze,disable plugins via SSH, fix WordPress loading problem, Lightsail troubleshooting,wp-content plugins folder, WordPress SSH access, plugin conflict resolution,WordPress admin not loading, Bitnami WordPress troubleshooting, Lightsail site not responding]
 author: Nida Sahar
 ---
 
@@ -15,9 +15,9 @@ In this guide, I’ll walk you through troubleshooting steps to identify and fix
 
 ---  
 
-## **Why Does WordPress Get Stuck at 33%?**  
+## Why WordPress Freezes at 33% on AWS Lightsail (Common Causes Explained)
 
-![Confused user illustration for WordPress stuck](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6365294.jpg)
+<img src={require('./img/6365294.jpg').default} alt="Illustration of a frustrated user viewing a WordPress site stuck at 33% loading" width="500" height="400"/>
 <br/>
 
 When your site hangs at 33%, it usually means WordPress is waiting for a response from a slow or failing process—often a plugin. This could happen because:  
@@ -31,12 +31,11 @@ Since AWS Lightsail doesn’t provide direct error logs in the dashboard, we’l
 
 ---  
 
-## **Step-by-Step Troubleshooting**  
-
-![User navigating steps to troubleshoot WordPress issues](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6567074.jpg)
+## Step-by-Step Guide to Fix WordPress Stuck at 33% Using SSH
+<img src={require('./img/6567074.jpg').default} alt="Visual showing user following steps to fix WordPress issues on AWS Lightsail" width="500" height="400"/>
 <br/>
 
-### **1. Access Your WordPress Site via SSH**  
+###  Step 1: Log Into AWS Lightsail via SSH to Access WordPress
 
 Since you can’t access the WordPress admin dashboard (because the site is stuck), you’ll need to log in to your Lightsail instance via SSH:  
 
@@ -54,7 +53,7 @@ More on SSH access in [Lightsail](https://lightsail.aws.amazon.com/ls/docs/en_us
 
 
 
-### **2. Temporarily Disable All Plugins**  
+### Step 2: Disable All WordPress Plugins via SSH for Troubleshooting 
 
 To check if a plugin is causing the issue, we’ll disable all of them at once by renaming the plugins folder:  
 
@@ -66,14 +65,14 @@ This adds `_disabled` to each plugin’s folder name, making WordPress ignore th
 
 
 
-### **3. Check If Your Site Loads**  
+### Step 3: Test the Site After Disabling Plugins 
 
-![Checking if site loads correctly](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/4936930.jpg)
+<img src={require('./img/4936930.jpg').default} alt="Screenshot-style graphic of a user testing site load after disabling plugins" width="500" height="400"/>
 <br/>
 
 After disabling plugins, refresh your WordPress site. If it loads normally, the problem is definitely plugin-related.  
 
-### **4. Re-enable Plugins One by One**  
+### Step 4: Re-enable WordPress Plugins Individually to Identify the Problematic One
 
 Now, we’ll re-enable plugins one at a time to find the troublemaker.  
 
@@ -85,7 +84,7 @@ mv yoast-seo_disabled yoast-seo
 
 After enabling each plugin, refresh your site. If it freezes again, the last plugin you enabled is likely the issue.  
 
-### **5. Clear Cache and Restart Services**  
+### Step 5: Clear WordPress Cache and Restart Apache in Bitnami Stack
 
 Sometimes, cached data can interfere. Clear the cache and restart your web server:  
 
@@ -100,7 +99,7 @@ How to clear [WordPress cache](https://www.wpbeginner.com/beginners-guide/how-to
 
 This ensures changes take effect.  
 
-### **6. Fix or Replace the Problematic Plugin**  
+### Step 6: Update, Replace, or Remove the Faulty WordPress Plugin
 
 Once you’ve found the faulty plugin, you have a few options:  
 
@@ -114,7 +113,8 @@ Best practices for evaluating [WordPress](https://kinsta.com/blog/wordpress-plug
 
 ---  
 
-## **Final Thoughts**  
+## Final Thoughts: Restore Full WordPress Functionality on AWS Lightsail
+
 
 A WordPress site freezing at 33% is frustrating, but the fix is usually straightforward—a misbehaving plugin. By disabling plugins via SSH and re-enabling them one by one, you can quickly identify the culprit.  
 

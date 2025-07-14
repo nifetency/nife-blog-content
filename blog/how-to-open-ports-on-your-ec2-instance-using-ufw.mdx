@@ -1,31 +1,31 @@
 ---
-title: "How to Open Ports on Your EC2 Instance Using UFW (Uncomplicated Firewall)"
-author: Nida Sahar
+title: "How to Open Ports on AWS EC2 with UFW: Secure Firewall Configuration Guide"
+author: "Nida Sahar"
 date: "2025-04-03"
 tags: ["AWS", "EC2", "UFW", "Security", "Cloud", "Firewall", "Networking"]
-keywords: [AWS EC2 firewall, open ports on EC2, UFW security, allow SSH in EC2, manage firewall rules AWS, secure EC2 instance, UFW configuration, EC2 networking, AWS firewall best practices, Ubuntu UFW setup]
-description: "Learn how to configure UFW on your EC2 instance to open necessary ports while keeping your instance secure."
+keywords: [AWS EC2 firewall, open ports on EC2, EC2 UFW setup, UFW on Ubuntu EC2,UFW security rules AWS, allow SSH EC2, open MySQL port EC2, firewall rules in EC2 instance,UFW enable EC2, EC2 Ubuntu firewall configuration, AWS security group vs UFW,UFW commands AWS, EC2 port configuration Ubuntu, EC2 firewall setup guide,secure EC2 instance with UFW]
+description: "Secure your AWS EC2 instance with UFW. Learn how to install and configure UFW to open SSH, MySQL, and HTTP ports while protecting your cloud server."
 ---
 
 If you've ever worked with AWS EC2 instances, you know that keeping your instance secure is crucial. One way to do this is by managing your firewall, and in this blog post, well go over how to configure **UFW (Uncomplicated Firewall)** on your EC2 instance to allow specific ports—like **SSH (port 22), MySQL (port 3306), and HTTP (port 80)**—so you can connect to your instance and run services smoothly.
 
-## Why Use UFW?
+## Why Use UFW on AWS EC2? Benefits of Uncomplicated Firewall
 
 
-![Illustration highlighting the importance of using UFW](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20943401.jpg)
+<img src={require('./img/20943401.jpg').default} alt="Visual guide emphasizing the use of UFW firewall for AWS EC2 security" width="600" height="450"/>
 <br/>
 
 On Ubuntu and other Debian-based systems, UFW is a straightforward command-line interface for controlling firewall rules.  Because it is easy to set up and still provides a high degree of security, it is ideal for EC2 instances.  Allowing the traffic you require while keeping unnecessary ports open to the internet is the aim here.
 
-## Prerequisites
+## What You Need Before Starting UFW on EC2
 Before diving in, make sure:
 - Your EC2 instance is running Ubuntu or another Debian-based Linux distribution.
 - You have **SSH access** to the instance.
 - UFW is installed (well check and install it if necessary).
 
-## Step-by-Step Guide to Open Ports
+## How to Open Ports on EC2 Instance Using UFW: Step-by-Step Instructions
 
-![Step-by-step guide on how to open ports](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20943993.jpg)
+<img src={require('./img/20943993.jpg').default} alt="Step-by-step UFW configuration on EC2 to open SSH, HTTP, and MySQL ports" width="600" height="450"/>
 <br/>
 
 ### 1. Check if UFW is Installed
@@ -114,10 +114,10 @@ This confirms which ports are open and from which IPs they can be accessed.
 
 ## Troubleshooting Common Issues
 
-![Guide to troubleshooting common issues](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/20943392.jpg)
+<img src={require('./img/20943392.jpg').default} alt="Troubleshooting UFW on AWS EC2 instance for SSH, MySQL, and web traffic connectivity issues" width="600" height="450"/>
 <br/>
 
-### Can't Connect via SSH?
+### 	Fix SSH Access Issues on EC2 After Enabling UFW
 If you cant connect to your EC2 instance via SSH after enabling UFW, make sure **port 22** is open:
 
 ```bash
@@ -126,13 +126,13 @@ sudo ufw allow 22
 
 Also, check your **AWS Security Group settings** and ensure SSH is allowed. You can review AWS security group rules [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules.html).
 
-### Can't Connect to MySQL?
+### Troubleshooting MySQL Port (3306) Access on EC2 with UFW
 Ensure **port 3306** is open and verify that your database allows remote connections.
 
-### Web Traffic Not Reaching the Instance?
+### Troubleshoot HTTP Port (80) Access on EC2 with UFW and Security Groups
 Check if **port 80** is open and confirm that your EC2 **security group** allows inbound HTTP traffic.
 
-## Conclusion
+## Final Thoughts: Secure Your EC2 Instance with UFW
 You now know how to use UFW to open particular ports on your EC2 instance, enabling HTTP, MySQL, and SSH communication while restricting access to unwanted ports.  This keeps your server safe while guaranteeing that critical services run correctly.
 
 ## Related Reads  

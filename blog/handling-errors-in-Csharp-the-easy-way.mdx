@@ -7,7 +7,7 @@ author: Nida Sahar
 keywords: [C# Error Handling, Exception Handling in C#, JSON Deserialization, Logging Errors, Debugging in C#, .NET Development, Custom Error Responses, Application Stability]
 ---
 
-![nginx and docker](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/11075021.jpg)
+<img src={require('./img/11075021.jpg').default} alt="nginx and docker" width="650" height="450"/>
 <br/>
 
 You are aware that things don't always go as planned if you have ever dealt with [C#](https://www.w3schools.com/cs/index.php) or any type of online API. There are instances when you get strange JSON, when a field is missing, and when—well—things just break. The good news is that you don't have to let your app crash and burn because of such problems. We can apprehend them, record them, and continue on.
@@ -25,7 +25,7 @@ With a custom error response object, you can:
 
 ## Setting Up Our Custom Error Object
 
-![nginx and docker](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/6199776.jpg)
+<img src={require('./img/6199776.jpg').default} alt="nginx and docker" width="650" height="550"/>
 <br/>
 
 Let's start by setting up a basic error response object. This will hold our error messages in a dictionary, so we can [track multiple types of errors](https://tutorials.eu/how-to-catch-multiple-exceptions-c-sharp/).
@@ -135,7 +135,7 @@ public class Program
 ```
 
 ## What's Going On Here?
-![nginx and docker](https://raw.githubusercontent.com/nifetency/nife-blog-content/main/blog/img/8712631.jpg)
+<img src={require('./img/8712631.jpg').default} alt="nginx and docker" width="650" height="550"/>
 <br/>
 
 - **[Deserialization](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/deserialization)**: We attempt to create our `ErrResponse` object from the JSON. Fantastic if it does. If not, the error is detected.
