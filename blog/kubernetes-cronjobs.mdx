@@ -17,7 +17,7 @@ Familiar with the Linux `cron` utility for scheduling tasks?  A Kubernetes CronJ
 
 For comprehensive Kubernetes documentation, refer to: [https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/)
 
-<img src={require('./img/kube-cronjob.png').default} alt="Illustration of a cartoon engineer standing next to a Kubernetes CronJob dashboard showcasing scheduled task executions" width="1024" height="1024"/>
+<img src={require('./img/kube-cronjob.png').default} alt="Illustration of a cartoon engineer standing next to a Kubernetes CronJob dashboard showcasing scheduled task executions" width="1024" height="900"/>
 <br/>
 
 ## Why Use Kubernetes CronJobs?
@@ -114,7 +114,7 @@ This command removes files from `/var/log/myapp` older than 7 days.
 
 CronJobs excel at generating and distributing reports, eliminating manual intervention. Schedule them to create daily reports and send them to a dashboard or via email.
 
-<img src={require('./img/kube-monitor.png').default} alt="Illustration of a developer monitoring Kubernetes CronJobs in a dashboard, tracking job executions and metrics in real time" width="1024" height="1024"/>
+<img src={require('./img/kube-monitor.png').default} alt="Illustration of a developer monitoring Kubernetes CronJobs in a dashboard, tracking job executions and metrics in real time" width="1024" height="900"/>
 <br/>
 
 Many teams use CronJobs to regularly ping internal APIs, validating service availability and gathering key metrics:
@@ -144,7 +144,7 @@ kubectl logs job/my-cronjob-xxxxx
 
 # Testing and Utilizing Kubernetes CronJobs
 
-<img src={require('./img/kube-cron-test.png').default} alt="Illustration of a developer testing a Kubernetes CronJob, showing task success and error handling in a Kubernetes environment" width="1024" height="1024"/>
+<img src={require('./img/kube-cron-test.png').default} alt="Illustration of a developer testing a Kubernetes CronJob, showing task success and error handling in a Kubernetes environment" width="1024" height="900"/>
 <br/>
 
 Testing your CronJob shouldn't require waiting for the next scheduled run.  You can easily create a test job using the same job template:
