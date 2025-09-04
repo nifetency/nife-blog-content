@@ -7,9 +7,9 @@ author: Rahul Surya SH
 keywords: [vault, root token, admin token, unseal keys, recovery keys, regenerate, incident response, security, hashicorp]
 ---
 
-If you’ve lost your Vault **root** or **admin** token, don’t panic. As long as you still have your **unseal key shares** (or **recovery key** shares in auto‑unseal/HCP setups), you can generate a brand‑new root token and get back in. This post walks you through the exact process, plus a few hard‑won tips to avoid getting stuck again.
+If you’ve lost your [Vault](https://developer.hashicorp.com/vault) **root** or **admin** token, don’t panic. As long as you still have your **unseal key shares** (or **recovery key** shares in auto‑unseal/HCP setups), you can generate a brand‑new root token and get back in. This post walks you through the exact process, plus a few hard‑won tips to avoid getting stuck again.
 
-<img src={require('./img/vault.png').default} alt="Cartoon illustration of a worried person sitting at a laptop with a key symbol and warning sign, alongside the text Lost your Vault root token? Regenerate it safely" width="1024" height="900"/>
+<img src={require('./img/vault.png').default} alt="Cartoon illustration of a worried person sitting at a laptop with a key symbol and warning sign, alongside the text Lost your Vault root token? Regenerate it safely" width="950" height="450"/>
 <br/>
 
 > **Quick read**
@@ -22,7 +22,7 @@ If you’ve lost your Vault **root** or **admin** token, don’t panic. As long 
 
 > **Heads up:** In HSM/auto‑unseal or **HCP Vault**, you’ll use **recovery keys** instead of unseal keys. The flow is the same but add the `-recovery` flag where noted.
 
-For more background, check our guide on [how unsealing works](/docs/vault/unseal).
+You can also explore [HashiCorp’s official documentation](https://developer.hashicorp.com/vault/docs) for deeper technical references.
 
 ## 1) Confirm unseal state (and unseal if needed)
 ```bash
@@ -52,7 +52,6 @@ vault operator generate-root -init -recovery
 ```
 Record the **Nonce** and (if provided) **OTP**.
 
-Learn more about [Vault recovery keys](/docs/vault/recovery-keys).
 
 ## 3) Provide key shares until threshold
 Run the following **once per share**, using the same Nonce each time. Paste a **different** share for each prompt.
@@ -73,7 +72,7 @@ vault operator generate-root -recovery -nonce=<NONCE>
 ```
 You’ll also receive an `encoded_token`.
 
-Check out our [policies 101 guide](/docs/vault/policies) to understand how tokens interact with access control.
+If you’re interested in deploying secure apps once Vault is ready, check out [Nife.io](https://nife.io) and specifically their [containerized app deployment solutions](https://nife.io/solutions/deploy_containarized_apps).
 
 ## 4) Decode to reveal the root token
 Use the OTP from step 2 and the `encoded_token` from step 3:
@@ -88,7 +87,7 @@ Log in with your new root token:
 vault login <ROOT_TOKEN>
 ```
 
-Then create an **admin** policy and token for safer day‑to‑day use. See our article on [Vault token management best practices](/blog/vault-token-management) for detailed steps.
+Then create an **admin** policy and token for safer day‑to‑day use. For best practices, check [Vault token usage patterns](https://developer.hashicorp.com/vault/tutorials/tokens).
 
 ## Conclusion
 Losing a Vault root or admin token can be stressful, but with unseal or recovery keys, recovery is straightforward. The key is to follow the generation process carefully: initialize with an OTP, submit enough key shares, decode the result, and use the root token only long enough to mint an admin token. By immediately switching to a least‑privilege admin token, documenting where keys are stored, and scheduling regular key rotations, you ensure Vault remains resilient and secure even during unexpected incidents.
