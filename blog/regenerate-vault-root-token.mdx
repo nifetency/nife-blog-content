@@ -1,0 +1,94 @@
+---
+title: "Lost Your Vault Root/Admin Token? Regenerate It Safely"
+description: "A clear, step‑by‑step recovery guide to generate a new Vault root token using unseal or recovery keys, then mint a proper admin token."
+date: "2025-09-04"
+tags: ["vault", "hashicorp", "incident-response", "security"]
+author: Rahul Surya SH
+keywords: [vault, root token, admin token, unseal keys, recovery keys, regenerate, incident response, security, hashicorp]
+---
+
+If you’ve lost your Vault **root** or **admin** token, don’t panic. As long as you still have your **unseal key shares** (or **recovery key** shares in auto‑unseal/HCP setups), you can generate a brand‑new root token and get back in. This post walks you through the exact process, plus a few hard‑won tips to avoid getting stuck again.
+
+<img src={require('./img/vault.png').default} alt="Cartoon illustration of a worried person sitting at a laptop with a key symbol and warning sign, alongside the text Lost your Vault root token? Regenerate it safely" width="1024" height="900"/>
+<br/>
+
+> **Quick read**
+> 1) Ensure Vault is **unsealed**. 2) Start a **root generation** attempt (capture the *Nonce* and *OTP*). 3) Provide enough key shares to reach threshold. 4) **Decode** the token with your OTP. 5) Log in and mint a **least‑privilege admin** token.
+
+## Prerequisites
+- Network access to your active Vault node: `VAULT_ADDR` like `https://<vault-host>:8200`.
+- The **threshold number** of shares (e.g., 3 of 5). One share is **not** enough.
+- Shell with Vault CLI (`vault`) installed.
+
+> **Heads up:** In HSM/auto‑unseal or **HCP Vault**, you’ll use **recovery keys** instead of unseal keys. The flow is the same but add the `-recovery` flag where noted.
+
+For more background, check our guide on [how unsealing works](/docs/vault/unseal).
+
+## 1) Confirm unseal state (and unseal if needed)
+```bash
+export VAULT_ADDR="https://<VAULT_HOST>:8200"
+# (Optional if you knowingly have self‑signed TLS)
+# export VAULT_SKIP_VERIFY=true
+
+vault status
+```
+If it shows `Sealed: true`, run `vault operator unseal` repeatedly, each time pasting a **different** unseal key share until `Sealed: false`. On Kubernetes, `kubectl exec` into the Vault pod and run the same commands.
+
+## 2) Start a root token generation attempt
+**Recommended:** Let Vault generate the OTP for you so formatting is guaranteed:
+```bash
+vault operator generate-root -init
+```
+This prints two important values:
+- **Nonce** — a unique ID for this attempt (you’ll reuse it for each share)
+- **OTP** — a one‑time password used later to decrypt the result
+
+> Supplying your own OTP? It must meet Vault’s length/format rules. If you see `OTP string is wrong length`, just rerun without `-otp` and use the OTP Vault prints.
+
+### HCP/Auto‑unseal (recovery keys)
+If you’re in HCP Vault or auto‑unseal with recovery keys:
+```bash
+vault operator generate-root -init -recovery
+```
+Record the **Nonce** and (if provided) **OTP**.
+
+Learn more about [Vault recovery keys](/docs/vault/recovery-keys).
+
+## 3) Provide key shares until threshold
+Run the following **once per share**, using the same Nonce each time. Paste a **different** share for each prompt.
+```bash
+vault operator generate-root -nonce=<NONCE>
+# paste unseal key share 1
+vault operator generate-root -nonce=<NONCE>
+# paste unseal key share 2
+vault operator generate-root -nonce=<NONCE>
+# ...repeat until threshold is reached
+```
+On the **final** share, Vault prints an `encoded_token` (a long string). That’s not the root token yet—one more step.
+
+### HCP/Auto‑unseal variant
+```bash
+vault operator generate-root -recovery -nonce=<NONCE>
+# paste recovery key share(s) until threshold
+```
+You’ll also receive an `encoded_token`.
+
+Check out our [policies 101 guide](/docs/vault/policies) to understand how tokens interact with access control.
+
+## 4) Decode to reveal the root token
+Use the OTP from step 2 and the `encoded_token` from step 3:
+```bash
+vault operator generate-root -decode=<ENCODED_TOKEN> -otp=<OTP>
+```
+This prints your **root token**. Copy it now and store it securely.
+
+## 5) Next steps: Log in and create an admin token
+Log in with your new root token:
+```bash
+vault login <ROOT_TOKEN>
+```
+
+Then create an **admin** policy and token for safer day‑to‑day use. See our article on [Vault token management best practices](/blog/vault-token-management) for detailed steps.
+
+## Conclusion
+Losing a Vault root or admin token can be stressful, but with unseal or recovery keys, recovery is straightforward. The key is to follow the generation process carefully: initialize with an OTP, submit enough key shares, decode the result, and use the root token only long enough to mint an admin token. By immediately switching to a least‑privilege admin token, documenting where keys are stored, and scheduling regular key rotations, you ensure Vault remains resilient and secure even during unexpected incidents.
